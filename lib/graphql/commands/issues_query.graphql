@@ -1,0 +1,19 @@
+query {
+    repository(owner:"flutter", name:"flutter") {
+        issues(last:20) {
+            edges {
+                node {
+                    title
+                    url
+                    labels(first:5) {
+                        edges {
+                            node {
+                                name
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
