@@ -1,8 +1,9 @@
-query {
+query ($fetchMoreCursor: String, $state: [IssueState!], $field: IssueOrderField!, $direction: OrderDirection!) {
     repository(owner:"flutter", name:"flutter") {
-        issues(last:20) {
+        issues (first: 20, states: $state, after: $fetchMoreCursor, orderBy: {field: $field, direction: $direction}) {
             edges {
                 node {
+                    databaseId
                     title
                     url
                     labels(first:5) {
@@ -13,6 +14,10 @@ query {
                         }
                     }
                 }
+            }
+            pageInfo {
+                endCursor
+                hasNextPage
             }
         }
     }

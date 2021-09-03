@@ -62,6 +62,7 @@ GraphqlApi$Query$Repository$Issues$Edges$Node
     _$GraphqlApi$Query$Repository$Issues$Edges$NodeFromJson(
         Map<String, dynamic> json) {
   return GraphqlApi$Query$Repository$Issues$Edges$Node()
+    ..databaseId = json['databaseId'] as int?
     ..title = json['title'] as String
     ..url = json['url'] as String
     ..labels = json['labels'] == null
@@ -73,6 +74,7 @@ GraphqlApi$Query$Repository$Issues$Edges$Node
 Map<String, dynamic> _$GraphqlApi$Query$Repository$Issues$Edges$NodeToJson(
         GraphqlApi$Query$Repository$Issues$Edges$Node instance) =>
     <String, dynamic>{
+      'databaseId': instance.databaseId,
       'title': instance.title,
       'url': instance.url,
       'labels': instance.labels?.toJson(),
@@ -94,6 +96,21 @@ Map<String, dynamic> _$GraphqlApi$Query$Repository$Issues$EdgesToJson(
       'node': instance.node?.toJson(),
     };
 
+GraphqlApi$Query$Repository$Issues$PageInfo
+    _$GraphqlApi$Query$Repository$Issues$PageInfoFromJson(
+        Map<String, dynamic> json) {
+  return GraphqlApi$Query$Repository$Issues$PageInfo()
+    ..endCursor = json['endCursor'] as String?
+    ..hasNextPage = json['hasNextPage'] as bool;
+}
+
+Map<String, dynamic> _$GraphqlApi$Query$Repository$Issues$PageInfoToJson(
+        GraphqlApi$Query$Repository$Issues$PageInfo instance) =>
+    <String, dynamic>{
+      'endCursor': instance.endCursor,
+      'hasNextPage': instance.hasNextPage,
+    };
+
 GraphqlApi$Query$Repository$Issues _$GraphqlApi$Query$Repository$IssuesFromJson(
     Map<String, dynamic> json) {
   return GraphqlApi$Query$Repository$Issues()
@@ -102,13 +119,16 @@ GraphqlApi$Query$Repository$Issues _$GraphqlApi$Query$Repository$IssuesFromJson(
             ? null
             : GraphqlApi$Query$Repository$Issues$Edges.fromJson(
                 e as Map<String, dynamic>))
-        .toList();
+        .toList()
+    ..pageInfo = GraphqlApi$Query$Repository$Issues$PageInfo.fromJson(
+        json['pageInfo'] as Map<String, dynamic>);
 }
 
 Map<String, dynamic> _$GraphqlApi$Query$Repository$IssuesToJson(
         GraphqlApi$Query$Repository$Issues instance) =>
     <String, dynamic>{
       'edges': instance.edges?.map((e) => e?.toJson()).toList(),
+      'pageInfo': instance.pageInfo.toJson(),
     };
 
 GraphqlApi$Query$Repository _$GraphqlApi$Query$RepositoryFromJson(
@@ -136,3 +156,71 @@ Map<String, dynamic> _$GraphqlApi$QueryToJson(GraphqlApi$Query instance) =>
     <String, dynamic>{
       'repository': instance.repository?.toJson(),
     };
+
+GraphqlApiArguments _$GraphqlApiArgumentsFromJson(Map<String, dynamic> json) {
+  return GraphqlApiArguments(
+    fetchMoreCursor: json['fetchMoreCursor'] as String?,
+    state: (json['state'] as List<dynamic>?)
+        ?.map((e) => _$enumDecode(_$IssueStateEnumMap, e,
+            unknownValue: IssueState.artemisUnknown))
+        .toList(),
+    field: _$enumDecode(_$IssueOrderFieldEnumMap, json['field'],
+        unknownValue: IssueOrderField.artemisUnknown),
+    direction: _$enumDecode(_$OrderDirectionEnumMap, json['direction'],
+        unknownValue: OrderDirection.artemisUnknown),
+  );
+}
+
+Map<String, dynamic> _$GraphqlApiArgumentsToJson(
+        GraphqlApiArguments instance) =>
+    <String, dynamic>{
+      'fetchMoreCursor': instance.fetchMoreCursor,
+      'state': instance.state?.map((e) => _$IssueStateEnumMap[e]).toList(),
+      'field': _$IssueOrderFieldEnumMap[instance.field],
+      'direction': _$OrderDirectionEnumMap[instance.direction],
+    };
+
+K _$enumDecode<K, V>(
+  Map<K, V> enumValues,
+  Object? source, {
+  K? unknownValue,
+}) {
+  if (source == null) {
+    throw ArgumentError(
+      'A value must be provided. Supported values: '
+      '${enumValues.values.join(', ')}',
+    );
+  }
+
+  return enumValues.entries.singleWhere(
+    (e) => e.value == source,
+    orElse: () {
+      if (unknownValue == null) {
+        throw ArgumentError(
+          '`$source` is not one of the supported values: '
+          '${enumValues.values.join(', ')}',
+        );
+      }
+      return MapEntry(unknownValue, enumValues.values.first);
+    },
+  ).key;
+}
+
+const _$IssueStateEnumMap = {
+  IssueState.closed: 'CLOSED',
+  IssueState.open: 'OPEN',
+  IssueState.artemisUnknown: 'ARTEMIS_UNKNOWN',
+};
+
+const _$IssueOrderFieldEnumMap = {
+  IssueOrderField.comments: 'COMMENTS',
+  IssueOrderField.createdAt: 'CREATED_AT',
+  IssueOrderField.updatedAt: 'UPDATED_AT',
+  IssueOrderField.artemisUnknown: 'ARTEMIS_UNKNOWN',
+};
+
+const _$OrderDirectionEnumMap = {
+  OrderDirection.asc: 'ASC',
+  OrderDirection.desc: 'DESC',
+  OrderDirection.artemisUnknown: 'ARTEMIS_UNKNOWN',
+};

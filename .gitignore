@@ -47,3 +47,4 @@ app.*.map.json
 
 # local file
 lib/common/local.dart
+.graphqlconfig

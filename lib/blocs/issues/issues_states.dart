@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mms/graphql/graphql_api.graphql.dart';
+import 'package:mms/data/models/issue_list.dart';
 
 class IssuesState extends Equatable {
   final List<Object?>? objProps;
@@ -16,11 +16,11 @@ class IssuesLoading extends IssuesState {
 }
 
 class IssuesLoaded extends IssuesState {
-  final List<GraphqlApi$Query$Repository$Issues$Edges?>? issues;
+  final IssueList issues;
   IssuesLoaded({required this.issues}) : super([issues]);
 
   @override
-  String toString() => 'IssuesLoaded ${issues!.length}';
+  String toString() => 'IssuesLoaded ${issues.currentList.length}';
 }
 
 class AuthenticationUnauthenticated extends IssuesState {

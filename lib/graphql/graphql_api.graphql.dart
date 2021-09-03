@@ -73,6 +73,8 @@ class GraphqlApi$Query$Repository$Issues$Edges$Node extends JsonSerializable
           Map<String, dynamic> json) =>
       _$GraphqlApi$Query$Repository$Issues$Edges$NodeFromJson(json);
 
+  int? databaseId;
+
   late String title;
 
   late String url;
@@ -80,7 +82,7 @@ class GraphqlApi$Query$Repository$Issues$Edges$Node extends JsonSerializable
   GraphqlApi$Query$Repository$Issues$Edges$Node$Labels? labels;
 
   @override
-  List<Object?> get props => [title, url, labels];
+  List<Object?> get props => [databaseId, title, url, labels];
   @override
   Map<String, dynamic> toJson() =>
       _$GraphqlApi$Query$Repository$Issues$Edges$NodeToJson(this);
@@ -105,6 +107,26 @@ class GraphqlApi$Query$Repository$Issues$Edges extends JsonSerializable
 }
 
 @JsonSerializable(explicitToJson: true)
+class GraphqlApi$Query$Repository$Issues$PageInfo extends JsonSerializable
+    with EquatableMixin {
+  GraphqlApi$Query$Repository$Issues$PageInfo();
+
+  factory GraphqlApi$Query$Repository$Issues$PageInfo.fromJson(
+          Map<String, dynamic> json) =>
+      _$GraphqlApi$Query$Repository$Issues$PageInfoFromJson(json);
+
+  String? endCursor;
+
+  late bool hasNextPage;
+
+  @override
+  List<Object?> get props => [endCursor, hasNextPage];
+  @override
+  Map<String, dynamic> toJson() =>
+      _$GraphqlApi$Query$Repository$Issues$PageInfoToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
 class GraphqlApi$Query$Repository$Issues extends JsonSerializable
     with EquatableMixin {
   GraphqlApi$Query$Repository$Issues();
@@ -115,8 +137,10 @@ class GraphqlApi$Query$Repository$Issues extends JsonSerializable
 
   List<GraphqlApi$Query$Repository$Issues$Edges?>? edges;
 
+  late GraphqlApi$Query$Repository$Issues$PageInfo pageInfo;
+
   @override
-  List<Object?> get props => [edges];
+  List<Object?> get props => [edges, pageInfo];
   @override
   Map<String, dynamic> toJson() =>
       _$GraphqlApi$Query$Repository$IssuesToJson(this);
@@ -152,11 +176,94 @@ class GraphqlApi$Query extends JsonSerializable with EquatableMixin {
   Map<String, dynamic> toJson() => _$GraphqlApi$QueryToJson(this);
 }
 
+enum IssueState {
+  @JsonValue('CLOSED')
+  closed,
+  @JsonValue('OPEN')
+  open,
+  @JsonValue('ARTEMIS_UNKNOWN')
+  artemisUnknown,
+}
+enum IssueOrderField {
+  @JsonValue('COMMENTS')
+  comments,
+  @JsonValue('CREATED_AT')
+  createdAt,
+  @JsonValue('UPDATED_AT')
+  updatedAt,
+  @JsonValue('ARTEMIS_UNKNOWN')
+  artemisUnknown,
+}
+enum OrderDirection {
+  @JsonValue('ASC')
+  asc,
+  @JsonValue('DESC')
+  desc,
+  @JsonValue('ARTEMIS_UNKNOWN')
+  artemisUnknown,
+}
+
+@JsonSerializable(explicitToJson: true)
+class GraphqlApiArguments extends JsonSerializable with EquatableMixin {
+  GraphqlApiArguments(
+      {this.fetchMoreCursor,
+      this.state,
+      required this.field,
+      required this.direction});
+
+  @override
+  factory GraphqlApiArguments.fromJson(Map<String, dynamic> json) =>
+      _$GraphqlApiArgumentsFromJson(json);
+
+  final String? fetchMoreCursor;
+
+  @JsonKey(unknownEnumValue: IssueState.artemisUnknown)
+  final List<IssueState>? state;
+
+  @JsonKey(unknownEnumValue: IssueOrderField.artemisUnknown)
+  late IssueOrderField field;
+
+  @JsonKey(unknownEnumValue: OrderDirection.artemisUnknown)
+  late OrderDirection direction;
+
+  @override
+  List<Object?> get props => [fetchMoreCursor, state, field, direction];
+  @override
+  Map<String, dynamic> toJson() => _$GraphqlApiArgumentsToJson(this);
+}
+
 final GRAPHQL_API_QUERY_DOCUMENT = DocumentNode(definitions: [
   OperationDefinitionNode(
       type: OperationType.query,
       name: null,
-      variableDefinitions: [],
+      variableDefinitions: [
+        VariableDefinitionNode(
+            variable: VariableNode(name: NameNode(value: 'fetchMoreCursor')),
+            type: NamedTypeNode(
+                name: NameNode(value: 'String'), isNonNull: false),
+            defaultValue: DefaultValueNode(value: null),
+            directives: []),
+        VariableDefinitionNode(
+            variable: VariableNode(name: NameNode(value: 'state')),
+            type: ListTypeNode(
+                type: NamedTypeNode(
+                    name: NameNode(value: 'IssueState'), isNonNull: true),
+                isNonNull: false),
+            defaultValue: DefaultValueNode(value: null),
+            directives: []),
+        VariableDefinitionNode(
+            variable: VariableNode(name: NameNode(value: 'field')),
+            type: NamedTypeNode(
+                name: NameNode(value: 'IssueOrderField'), isNonNull: true),
+            defaultValue: DefaultValueNode(value: null),
+            directives: []),
+        VariableDefinitionNode(
+            variable: VariableNode(name: NameNode(value: 'direction')),
+            type: NamedTypeNode(
+                name: NameNode(value: 'OrderDirection'), isNonNull: true),
+            defaultValue: DefaultValueNode(value: null),
+            directives: [])
+      ],
       directives: [],
       selectionSet: SelectionSetNode(selections: [
         FieldNode(
@@ -177,8 +284,27 @@ final GRAPHQL_API_QUERY_DOCUMENT = DocumentNode(definitions: [
                   alias: null,
                   arguments: [
                     ArgumentNode(
-                        name: NameNode(value: 'last'),
-                        value: IntValueNode(value: '20'))
+                        name: NameNode(value: 'first'),
+                        value: IntValueNode(value: '20')),
+                    ArgumentNode(
+                        name: NameNode(value: 'states'),
+                        value: VariableNode(name: NameNode(value: 'state'))),
+                    ArgumentNode(
+                        name: NameNode(value: 'after'),
+                        value: VariableNode(
+                            name: NameNode(value: 'fetchMoreCursor'))),
+                    ArgumentNode(
+                        name: NameNode(value: 'orderBy'),
+                        value: ObjectValueNode(fields: [
+                          ObjectFieldNode(
+                              name: NameNode(value: 'field'),
+                              value:
+                                  VariableNode(name: NameNode(value: 'field'))),
+                          ObjectFieldNode(
+                              name: NameNode(value: 'direction'),
+                              value: VariableNode(
+                                  name: NameNode(value: 'direction')))
+                        ]))
                   ],
                   directives: [],
                   selectionSet: SelectionSetNode(selections: [
@@ -194,6 +320,12 @@ final GRAPHQL_API_QUERY_DOCUMENT = DocumentNode(definitions: [
                               arguments: [],
                               directives: [],
                               selectionSet: SelectionSetNode(selections: [
+                                FieldNode(
+                                    name: NameNode(value: 'databaseId'),
+                                    alias: null,
+                                    arguments: [],
+                                    directives: [],
+                                    selectionSet: null),
                                 FieldNode(
                                     name: NameNode(value: 'title'),
                                     alias: null,
@@ -241,14 +373,34 @@ final GRAPHQL_API_QUERY_DOCUMENT = DocumentNode(definitions: [
                                           ]))
                                     ]))
                               ]))
+                        ])),
+                    FieldNode(
+                        name: NameNode(value: 'pageInfo'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: SelectionSetNode(selections: [
+                          FieldNode(
+                              name: NameNode(value: 'endCursor'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null),
+                          FieldNode(
+                              name: NameNode(value: 'hasNextPage'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null)
                         ]))
                   ]))
             ]))
       ]))
 ]);
 
-class GraphqlApiQuery extends GraphQLQuery<GraphqlApi$Query, JsonSerializable> {
-  GraphqlApiQuery();
+class GraphqlApiQuery
+    extends GraphQLQuery<GraphqlApi$Query, GraphqlApiArguments> {
+  GraphqlApiQuery({required this.variables});
 
   @override
   final DocumentNode document = GRAPHQL_API_QUERY_DOCUMENT;
@@ -257,7 +409,10 @@ class GraphqlApiQuery extends GraphQLQuery<GraphqlApi$Query, JsonSerializable> {
   final String operationName = 'graphql_api';
 
   @override
-  List<Object?> get props => [document, operationName];
+  final GraphqlApiArguments variables;
+
+  @override
+  List<Object?> get props => [document, operationName, variables];
   @override
   GraphqlApi$Query parse(Map<String, dynamic> json) =>
       GraphqlApi$Query.fromJson(json);

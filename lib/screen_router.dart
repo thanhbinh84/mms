@@ -3,14 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mms/blocs/issues/issues_bloc.dart';
 import 'package:mms/graphql/api.dart';
 import 'package:mms/repositories/issue_repos.dart';
-import 'package:mms/screens/issues_screen.dart';
+import 'package:mms/views/screens/issue_detail_screen.dart';
+import 'package:mms/views/screens/issues_screen.dart';
 
 class ScreenRouter {
   static const ROOT = '/';
   static const ISSUE_DETAILS = 'ISSUE_DETAILS';
 
   // ARGUMENTS
-  static const ISSUE = 'ISSUE';
+  static const ARG_ISSUE = 'ISSUE';
 
   late IssueRepository issueRepository;
   late BaseAPI api;
@@ -28,7 +29,9 @@ class ScreenRouter {
     print('>>>>>>> GOTO: ${settings.name}');
     switch (settings.name) {
       case ROOT:
-        return route(Root());
+        return route(IssuesScreen());
+      case ISSUE_DETAILS:
+        return route(IssueDetailsScreen(issue: arguments[ARG_ISSUE]));
       default:
         return unknownRoute(settings);
     }
@@ -65,7 +68,8 @@ class ScreenRouter {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-            }, child: Text('Back'),
+            },
+            child: Text('Back'),
           ),
         ],
       );

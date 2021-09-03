@@ -1,15 +1,16 @@
-import 'package:mms/graphql/graphql_api.dart';
+import 'package:mms/data/models/issue_criteria.dart';
+import 'package:mms/data/models/issue_list.dart';
 import 'package:mms/graphql/api.dart';
 
 abstract class BaseIssueRepository {
-  Future<List<GraphqlApi$Query$Repository$Issues$Edges?>?> getIssues();
+  Future<IssueList> getIssues(IssueList issueList, IssueCriteria issueCriteria);
 }
 
 class IssueRepository extends BaseIssueRepository {
   final BaseAPI api;
   IssueRepository({required this.api});
 
-  Future<List<GraphqlApi$Query$Repository$Issues$Edges?>?> getIssues() async {
-    return api.getIssues();
+  Future<IssueList> getIssues(IssueList issueList, IssueCriteria issueCriteria) async {
+    return api.getIssues(issueList, issueCriteria);
   }
 }
