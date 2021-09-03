@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:http/io_client.dart';
+import 'package:mms/common/local.dart';
 import 'package:mms/graphql/graphql_api.graphql.dart';
 
-const GRAPHQL_URL = 'https://api.github.com/graphql';
-const GRAPHQL_ACCESS_TOKEN = 'Bearer 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';
+const ACCESS_POINT = 'https://api.github.com/graphql';
 
 abstract class BaseAPI {
   Future<List<GraphqlApi$Query$Repository$Issues$Edges?>?> getIssues();
@@ -19,9 +19,9 @@ class API extends BaseAPI {
   }
 
   API._internal() {
-    final HttpLink link = HttpLink(GRAPHQL_URL, httpClient: IOClient(HttpClient()));
+    final HttpLink link = HttpLink(ACCESS_POINT, httpClient: IOClient(HttpClient()));
     final AuthLink authLink = AuthLink(
-        getToken: () => GRAPHQL_ACCESS_TOKEN
+        getToken: () => 'Bearer $YOUR_PERSONAL_ACCESS_TOKEN'
     );
 
     final policies = Policies(
