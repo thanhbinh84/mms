@@ -1,5 +1,6 @@
-import 'dart:io';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'dart:io';
 import 'package:http/io_client.dart';
 import 'package:mms/common/local.dart';
 import 'package:mms/data/models/issue_criteria.dart';
@@ -46,8 +47,20 @@ class API extends BaseAPI {
         direction: issueCriteria.sortBy.direction);
     QueryOptions queryOptions =
         QueryOptions(document: GraphqlApiQuery(variables: arg).document, variables: arg.toJson());
-    QueryResult result = await _graphQLClient.query(queryOptions);
-    issueList.updateData(GraphqlApi$Query.fromJson(result.data).repository!.issues);
+    Map<String,dynamic> data = await _handleResponse(_graphQLClient.query(queryOptions));
+    issueList.updateData(GraphqlApi$Query.fromJson(data).repository!.issues);
     return issueList;
+  }
+
+  Future _handleResponse(Future<QueryResult> request) async {
+    QueryResult result = await request;
+
+    if (result.hasException) {
+      String message = result.exception.graphqlErrors.isNotEmpty
+          ? result.exception.graphqlErrors.first.message
+          : result.exception.linkException.toString();
+      throw Exception(message);
+    }
+    return result.data;
   }
 }

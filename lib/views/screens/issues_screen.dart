@@ -1,3 +1,5 @@
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -8,10 +10,7 @@ import 'package:mms/data/models/issue_criteria.dart';
 import 'package:mms/data/models/issue_list.dart';
 import 'package:mms/screen_router.dart';
 import 'package:mms/views/widgets/dropdown_widget.dart';
-import 'package:mms/views/widgets/theme_button_widget.dart';
-
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:mms/views/widgets/theme_button.dart';
 
 class IssuesScreen extends StatefulWidget {
   IssuesScreen({
@@ -44,7 +43,7 @@ class _IssuesScreenState extends State<IssuesScreen> {
           } else if (state is IssuesLoaded) _refreshCompleted();
         },
         child: Scaffold(
-          appBar: AppBar(title: Text('Flutter - Issues'), actions: [ThemeButtonWidget()],),
+          appBar: AppBar(title: Text('Flutter - Issues'), actions: [ThemeButton()],),
           body: _mainView(),
         ));
   }

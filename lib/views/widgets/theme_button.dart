@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mms/blocs/theme/theme_bloc.dart';
 
-class ThemeButtonWidget extends StatefulWidget {
+class ThemeButton extends StatefulWidget {
   @override
-  _ThemeButtonWidgetState createState() => _ThemeButtonWidgetState();
+  _ThemeButtonState createState() => _ThemeButtonState();
 }
 
-class _ThemeButtonWidgetState extends State<ThemeButtonWidget> {
+class _ThemeButtonState extends State<ThemeButton> {
   late ThemeCubit _themeCubit;
 
   @override
