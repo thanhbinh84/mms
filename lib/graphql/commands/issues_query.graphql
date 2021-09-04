@@ -6,13 +6,8 @@ query ($fetchMoreCursor: String, $state: [IssueState!], $field: IssueOrderField!
                     databaseId
                     title
                     url
-                    labels(first:5) {
-                        edges {
-                            node {
-                                name
-                            }
-                        }
-                    }
+                    closed
+                    number
                 }
             }
             pageInfo {

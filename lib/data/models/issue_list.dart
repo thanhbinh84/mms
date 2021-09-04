@@ -6,6 +6,8 @@ class Issue extends Equatable {
   String? url;
   int? id;
   bool isVisited = false;
+  bool closed = false;
+  int? number;
 
   Issue({this.title, this.id});
 
@@ -13,6 +15,8 @@ class Issue extends Equatable {
     this.title = edge.node!.title;
     this.url = edge.node!.url;
     this.id = edge.node!.databaseId;
+    this.closed = edge.node!.closed;
+    this.number = edge.node!.number;
   }
 
   static const KEY_ID = 'ID';

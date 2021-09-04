@@ -8,63 +8,6 @@ import 'package:gql/ast.dart';
 part 'graphql_api.graphql.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class GraphqlApi$Query$Repository$Issues$Edges$Node$Labels$Edges$Node
-    extends JsonSerializable with EquatableMixin {
-  GraphqlApi$Query$Repository$Issues$Edges$Node$Labels$Edges$Node();
-
-  factory GraphqlApi$Query$Repository$Issues$Edges$Node$Labels$Edges$Node.fromJson(
-          Map<String, dynamic> json) =>
-      _$GraphqlApi$Query$Repository$Issues$Edges$Node$Labels$Edges$NodeFromJson(
-          json);
-
-  late String name;
-
-  @override
-  List<Object?> get props => [name];
-  @override
-  Map<String, dynamic> toJson() =>
-      _$GraphqlApi$Query$Repository$Issues$Edges$Node$Labels$Edges$NodeToJson(
-          this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class GraphqlApi$Query$Repository$Issues$Edges$Node$Labels$Edges
-    extends JsonSerializable with EquatableMixin {
-  GraphqlApi$Query$Repository$Issues$Edges$Node$Labels$Edges();
-
-  factory GraphqlApi$Query$Repository$Issues$Edges$Node$Labels$Edges.fromJson(
-          Map<String, dynamic> json) =>
-      _$GraphqlApi$Query$Repository$Issues$Edges$Node$Labels$EdgesFromJson(
-          json);
-
-  GraphqlApi$Query$Repository$Issues$Edges$Node$Labels$Edges$Node? node;
-
-  @override
-  List<Object?> get props => [node];
-  @override
-  Map<String, dynamic> toJson() =>
-      _$GraphqlApi$Query$Repository$Issues$Edges$Node$Labels$EdgesToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
-class GraphqlApi$Query$Repository$Issues$Edges$Node$Labels
-    extends JsonSerializable with EquatableMixin {
-  GraphqlApi$Query$Repository$Issues$Edges$Node$Labels();
-
-  factory GraphqlApi$Query$Repository$Issues$Edges$Node$Labels.fromJson(
-          Map<String, dynamic> json) =>
-      _$GraphqlApi$Query$Repository$Issues$Edges$Node$LabelsFromJson(json);
-
-  List<GraphqlApi$Query$Repository$Issues$Edges$Node$Labels$Edges?>? edges;
-
-  @override
-  List<Object?> get props => [edges];
-  @override
-  Map<String, dynamic> toJson() =>
-      _$GraphqlApi$Query$Repository$Issues$Edges$Node$LabelsToJson(this);
-}
-
-@JsonSerializable(explicitToJson: true)
 class GraphqlApi$Query$Repository$Issues$Edges$Node extends JsonSerializable
     with EquatableMixin {
   GraphqlApi$Query$Repository$Issues$Edges$Node();
@@ -79,10 +22,12 @@ class GraphqlApi$Query$Repository$Issues$Edges$Node extends JsonSerializable
 
   late String url;
 
-  GraphqlApi$Query$Repository$Issues$Edges$Node$Labels? labels;
+  late bool closed;
+
+  late int number;
 
   @override
-  List<Object?> get props => [databaseId, title, url, labels];
+  List<Object?> get props => [databaseId, title, url, closed, number];
   @override
   Map<String, dynamic> toJson() =>
       _$GraphqlApi$Query$Repository$Issues$Edges$NodeToJson(this);
@@ -339,39 +284,17 @@ final GRAPHQL_API_QUERY_DOCUMENT = DocumentNode(definitions: [
                                     directives: [],
                                     selectionSet: null),
                                 FieldNode(
-                                    name: NameNode(value: 'labels'),
+                                    name: NameNode(value: 'closed'),
                                     alias: null,
-                                    arguments: [
-                                      ArgumentNode(
-                                          name: NameNode(value: 'first'),
-                                          value: IntValueNode(value: '5'))
-                                    ],
+                                    arguments: [],
                                     directives: [],
-                                    selectionSet: SelectionSetNode(selections: [
-                                      FieldNode(
-                                          name: NameNode(value: 'edges'),
-                                          alias: null,
-                                          arguments: [],
-                                          directives: [],
-                                          selectionSet:
-                                              SelectionSetNode(selections: [
-                                            FieldNode(
-                                                name: NameNode(value: 'node'),
-                                                alias: null,
-                                                arguments: [],
-                                                directives: [],
-                                                selectionSet: SelectionSetNode(
-                                                    selections: [
-                                                      FieldNode(
-                                                          name: NameNode(
-                                                              value: 'name'),
-                                                          alias: null,
-                                                          arguments: [],
-                                                          directives: [],
-                                                          selectionSet: null)
-                                                    ]))
-                                          ]))
-                                    ]))
+                                    selectionSet: null),
+                                FieldNode(
+                                    name: NameNode(value: 'number'),
+                                    alias: null,
+                                    arguments: [],
+                                    directives: [],
+                                    selectionSet: null)
                               ]))
                         ])),
                     FieldNode(

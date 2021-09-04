@@ -43,7 +43,10 @@ class _IssuesScreenState extends State<IssuesScreen> {
           } else if (state is IssuesLoaded) _refreshCompleted();
         },
         child: Scaffold(
-          appBar: AppBar(title: Text('Flutter - Issues'), actions: [ThemeButton()],),
+          appBar: AppBar(
+            title: Text('Flutter - Issues'),
+            actions: [ThemeButton()],
+          ),
           body: _mainView(),
         ));
   }
@@ -115,7 +118,8 @@ class _IssuesScreenState extends State<IssuesScreen> {
   }
 
   _goToIssueDetailsScreen(Issue issue) async {
-    await Navigator.pushNamed(context, ScreenRouter.ISSUE_DETAILS, arguments: {ScreenRouter.ARG_ISSUE: issue});
+    await Navigator.pushNamed(context, ScreenRouter.ISSUE_DETAILS,
+        arguments: {ScreenRouter.ARG_ISSUE: issue});
     _issuesCubit.addVisitedIssue(issue);
   }
 
@@ -124,26 +128,50 @@ class _IssuesScreenState extends State<IssuesScreen> {
       List<Issue> issueList = state.issueList.currentList;
       return issueList.isEmpty
           ? Center(child: Text('No issue found'))
-          : ListView.separated(
-              itemBuilder: (context, index) {
-                Issue issue = issueList[index];
-                return ListTile(
-                  title: Text(
-                    issue.title ?? '',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(fontWeight: issue.isVisited ? FontWeight.normal : FontWeight.bold),
-                  ),
-                  onTap: () => _goToIssueDetailsScreen(issue),
-                );
-              },
+          : ListView.builder(
+              itemBuilder: (context, index) => _listItemView(issueList[index]),
               itemCount: issueList.length,
-              separatorBuilder: (BuildContext context, int index) {
-                return Divider();
-              },
             );
     }
     return Container();
+  }
+
+  _listItemView(Issue issue) {
+    return InkWell(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: issue.closed
+                ? Icon(
+                    Icons.check_circle_outline,
+                    color: Theme.of(context).errorColor,
+                  )
+                : Icon(
+                    Icons.stop_circle_outlined,
+                    color: Theme.of(context).accentColor,
+                  ),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('flutter/flutter #${issue.number}', style: Theme.of(context).textTheme.bodyText2),
+                SizedBox(height: 8),
+                Text(issue.title ?? '',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(fontWeight: issue.isVisited ? FontWeight.normal : FontWeight.bold)),
+                SizedBox(height: 10),
+                Divider(height: 1)
+              ],
+            ),
+          )
+        ]),
+      ),
+      onTap: () => _goToIssueDetailsScreen(issue),
+    );
   }
 }
