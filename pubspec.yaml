@@ -33,6 +33,7 @@ dependencies:
   pull_to_refresh: ^1.6.5
   webview_flutter: ^2.0.12
   shared_preferences: ^2.0.5
+  fluttertoast: ^8.0.6
   # Graphql
   equatable: ^2.0.3
   graphql_flutter: ^4.0.1

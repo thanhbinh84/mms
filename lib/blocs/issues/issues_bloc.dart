@@ -12,8 +12,13 @@ class IssuesCubit extends Cubit<IssuesState> {
   }) : super(InitialIssueState());
 
   getIssues(IssueList issueList, IssueCriteria issueCriteria) async {
-    emit(IssuesLoading());
-    IssueList issues = await issueRepository.getIssues(issueList, issueCriteria);
-    emit(IssuesLoaded(issues: issues));
+    try {
+      emit(IssuesLoading());
+      IssueList issues = await issueRepository.getIssues(issueList, issueCriteria);
+      emit(IssuesLoaded(issues: issues));
+    } catch (e) {
+      emit(IssuesError(error: e.toString()));
+      rethrow;
+    }
   }
 }

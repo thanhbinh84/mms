@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mms/blocs/issues/issues_bloc.dart';
 import 'package:mms/blocs/issues/issues_states.dart';
+import 'package:mms/common/utils.dart';
 import 'package:mms/data/models/issue_criteria.dart';
 import 'package:mms/data/models/issue_list.dart';
 import 'package:mms/screen_router.dart';
@@ -37,14 +38,18 @@ class _IssuesScreenState extends State<IssuesScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<IssuesCubit, IssuesState>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is IssuesError) {
+            _refreshCompleted();
+            Utils.errorToast(state.error);
+          }
+        },
         child: BlocBuilder<IssuesCubit, IssuesState>(
           builder: (context, state) {
             _isLoading = state is IssuesLoading;
             if (state is IssuesLoaded) {
               _issueList = state.issues;
-              _refreshController.refreshCompleted();
-              _refreshController.loadComplete();
+              _refreshCompleted();
             }
             return Scaffold(
               appBar: AppBar(title: Text('Flutter - Issues')),
@@ -52,6 +57,11 @@ class _IssuesScreenState extends State<IssuesScreen> {
             );
           },
         ));
+  }
+
+  _refreshCompleted() {
+    _refreshController.refreshCompleted();
+    _refreshController.loadComplete();
   }
 
   _mainView() => Column(children: [_criteriaView(), Divider(), Expanded(child: _listView())]);

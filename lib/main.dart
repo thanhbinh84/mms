@@ -40,7 +40,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = SimpleBlocObserver();
   await Storage.instance.init();
-
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     home: Routes(),
