@@ -24,8 +24,6 @@ class IssuesScreen extends StatefulWidget {
 class _IssuesScreenState extends State<IssuesScreen> {
   RefreshController _refreshController = RefreshController(initialRefresh: false);
   late IssuesCubit _issuesCubit;
-  IssueList _issueList = IssueList();
-  bool _isLoading = false;
   IssueCriteria _issueCriteria = IssueCriteria();
 
   @override
@@ -39,23 +37,14 @@ class _IssuesScreenState extends State<IssuesScreen> {
   Widget build(BuildContext context) {
     return BlocListener<IssuesCubit, IssuesState>(
         listener: (context, state) {
-          if (state is IssuesError) {
+          if (state is IssuesFailure) {
             _refreshCompleted();
             Utils.errorToast(state.error);
-          }
+          } else if (state is IssuesLoaded) _refreshCompleted();
         },
-        child: BlocBuilder<IssuesCubit, IssuesState>(
-          builder: (context, state) {
-            _isLoading = state is IssuesLoading;
-            if (state is IssuesLoaded) {
-              _issueList = state.issues;
-              _refreshCompleted();
-            }
-            return Scaffold(
-              appBar: AppBar(title: Text('Flutter - Issues')),
-              body: _mainView(),
-            );
-          },
+        child: Scaffold(
+          appBar: AppBar(title: Text('Flutter - Issues')),
+          body: _mainView(),
         ));
   }
 
@@ -64,7 +53,7 @@ class _IssuesScreenState extends State<IssuesScreen> {
     _refreshController.loadComplete();
   }
 
-  _mainView() => Column(children: [_criteriaView(), Divider(), Expanded(child: _listView())]);
+  _mainView() => Column(children: [_criteriaView(), Divider(), Expanded(child: _smartRefresherView())]);
 
   _criteriaView() => Row(children: [_statusView(), _sortView()], mainAxisAlignment: MainAxisAlignment.start);
 
@@ -77,7 +66,7 @@ class _IssuesScreenState extends State<IssuesScreen> {
             style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold, fontSize: 15),
             onChanged: (value) => setState(() {
                   _issueCriteria.status = value!;
-                  _onRefresh();
+                  _getIssues();
                 }),
             items: Status.list.map<DropdownMenuItem<Status>>((Status status) {
               return DropdownMenuItem<Status>(
@@ -96,7 +85,7 @@ class _IssuesScreenState extends State<IssuesScreen> {
             style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold, fontSize: 15),
             onChanged: (value) => setState(() {
                   _issueCriteria.sortBy = value!;
-                  _onRefresh();
+                  _getIssues();
                 }),
             items: SortBy.list.map<DropdownMenuItem<SortBy>>((SortBy sortBy) {
               return DropdownMenuItem<SortBy>(
@@ -106,41 +95,55 @@ class _IssuesScreenState extends State<IssuesScreen> {
             }).toList()),
       );
 
-  void _getIssues() {
-    _issuesCubit.getIssues(_issueList, _issueCriteria);
+  void _getIssues({bool loadMore = false}) {
+    _issuesCubit.getIssues(_issueCriteria, loadMore: loadMore);
   }
 
-  _listView() {
-    List<Issue> issues = _issueList.currentList;
-    return SmartRefresher(
-        enablePullDown: true,
-        enablePullUp: _issueList.hasNextPage,
-        controller: _refreshController,
-        onRefresh: _onRefresh,
-        onLoading: _getIssues,
-        child: _isLoading && _issueList.currentList.isEmpty
-            ? SpinKitWave(color: Colors.black26, size: 25.0)
-            : ListView.separated(
-                itemBuilder: (context, index) {
-                  Issue issue = issues[index];
-                  return ListTile(
-                    title: Text(issue.title ?? ''),
-                    onTap: () => _goToIssueDetailsScreen(issue),
-                  );
-                },
-                itemCount: issues.length,
-                separatorBuilder: (BuildContext context, int index) {
-                  return Divider();
-                },
-              ));
+  _smartRefresherView() {
+    return BlocBuilder<IssuesCubit, IssuesState>(
+      builder: (context, state) {
+        return SmartRefresher(
+            enablePullDown: true,
+            enablePullUp: state is IssuesLoaded ? state.issueList.hasNextPage : true,
+            controller: _refreshController,
+            onRefresh: _getIssues,
+            onLoading: () => _getIssues(loadMore: true),
+            child:
+                state is IssuesLoading ? SpinKitWave(color: Colors.black26, size: 25.0) : _listView(state));
+      },
+    );
   }
 
-  void _onRefresh() {
-    _issueList = IssueList();
-    _getIssues();
+  _goToIssueDetailsScreen(Issue issue) async {
+    await Navigator.pushNamed(context, ScreenRouter.ISSUE_DETAILS, arguments: {ScreenRouter.ARG_ISSUE: issue});
+    _issuesCubit.addVisitedIssue(issue);
   }
 
-  _goToIssueDetailsScreen(Issue issue) {
-    Navigator.pushNamed(context, ScreenRouter.ISSUE_DETAILS, arguments: {ScreenRouter.ARG_ISSUE: issue});
+  _listView(IssuesState state) {
+    if (state is BaseIssueLoaded) {
+      List<Issue> issueList = state.issueList.currentList;
+      return issueList.isEmpty
+          ? Center(child: Text('No issue found'))
+          : ListView.separated(
+              itemBuilder: (context, index) {
+                Issue issue = issueList[index];
+                return ListTile(
+                  title: Text(
+                    issue.title ?? '',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(fontWeight: issue.isVisited ? FontWeight.normal : FontWeight.bold),
+                  ),
+                  onTap: () => _goToIssueDetailsScreen(issue),
+                );
+              },
+              itemCount: issueList.length,
+              separatorBuilder: (BuildContext context, int index) {
+                return Divider();
+              },
+            );
+    }
+    return Container();
   }
 }

@@ -1,9 +1,12 @@
+import 'package:mms/data/local/storage.dart';
 import 'package:mms/data/models/issue_criteria.dart';
 import 'package:mms/data/models/issue_list.dart';
 import 'package:mms/graphql/api.dart';
 
 abstract class BaseIssueRepository {
   Future<IssueList> getIssues(IssueList issueList, IssueCriteria issueCriteria);
+  Set<Issue> getVisitedIssues();
+  setVisitedIssues(Set<Issue> visitedIssues);
 }
 
 class IssueRepository extends BaseIssueRepository {
@@ -12,5 +15,15 @@ class IssueRepository extends BaseIssueRepository {
 
   Future<IssueList> getIssues(IssueList issueList, IssueCriteria issueCriteria) async {
     return api.getIssues(issueList, issueCriteria);
+  }
+
+  @override
+  Set<Issue> getVisitedIssues() {
+    return Storage.instance.getVisitedIssues();
+  }
+
+  @override
+   setVisitedIssues(Set<Issue> visitedIssues) {
+    Storage.instance.setVisitedIssues(visitedIssues);
   }
 }

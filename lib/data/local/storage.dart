@@ -32,12 +32,14 @@ class Storage {
   Set<Issue> getVisitedIssues() {
     String json = getString(KEY_VISITED_ISSUES);
     if (json.isEmpty) return Set();
-    return (jsonDecode(json) as Set<dynamic>).map<Issue>((item) => Issue.fromJson(item)).toSet();
+    return (jsonDecode(json) as List<dynamic>).map<Issue>((item) => Issue.fromJson(item)).toList().toSet();
   }
 
-  setVisitedIssues(Set<Issue> issueSet) => saveString(
-      KEY_VISITED_ISSUES,
-      json.encode(
-        issueSet.map<Map<String, dynamic>>((issue) => issue.toJson()).toList(),
-      ));
+  setVisitedIssues(Set<Issue> issueSet) {
+    saveString(
+        KEY_VISITED_ISSUES,
+        jsonEncode(
+          issueSet.map<Map<String, dynamic>>((issue) => issue.toJson()).toList(),
+        ));
+  }
 }

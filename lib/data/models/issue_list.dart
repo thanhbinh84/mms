@@ -1,9 +1,11 @@
+import 'package:equatable/equatable.dart';
 import 'package:mms/graphql/graphql_api.graphql.dart';
 
-class Issue {
+class Issue extends Equatable {
   String? title;
   String? url;
   int? id;
+  bool isVisited = false;
 
   Issue({this.title, this.id});
 
@@ -20,6 +22,9 @@ class Issue {
   }
 
   Map<String, dynamic> toJson() => {KEY_ID: id};
+
+  @override
+  List<Object?> get props => [id];
 }
 
 class IssueList {

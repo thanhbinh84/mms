@@ -15,12 +15,25 @@ class IssuesLoading extends IssuesState {
   String toString() => 'IssuesLoading';
 }
 
-class IssuesLoaded extends IssuesState {
-  final IssueList issues;
-  IssuesLoaded({required this.issues}) : super([issues]);
+class BaseIssueLoaded extends IssuesState {
+  final IssueList issueList;
+  BaseIssueLoaded({required this.issueList}) : super([issueList]);
+}
+
+class IssuesLoadMore extends BaseIssueLoaded {
+  final IssueList issueList;
+  IssuesLoadMore({required this.issueList}) : super(issueList: issueList);
 
   @override
-  String toString() => 'IssuesLoaded ${issues.currentList.length}';
+  String toString() => 'IssuesLoadMore ${issueList.currentList.length}';
+}
+
+class IssuesLoaded extends BaseIssueLoaded {
+  final IssueList issueList;
+  IssuesLoaded({required this.issueList}) : super(issueList: issueList);
+
+  @override
+  String toString() => 'IssuesLoaded ${issueList.currentList.length}';
 }
 
 class AuthenticationUnauthenticated extends IssuesState {
@@ -28,9 +41,9 @@ class AuthenticationUnauthenticated extends IssuesState {
   String toString() => 'AuthenticationUnauthenticated';
 }
 
-class IssuesError extends IssuesState {
+class IssuesFailure extends IssuesState {
   final String error;
-  IssuesError({required this.error}) : super([error]);
+  IssuesFailure({required this.error}) : super([error]);
 
   @override
   String toString() => 'IssuesError $error';
