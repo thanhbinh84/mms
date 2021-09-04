@@ -7,7 +7,7 @@
         "url": "https://api.github.com/graphql",
         "headers": {
           "user-agent": "JS GraphQL",
-          "Authorization": "Bearer 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"
+          "Authorization": "Bearer YOUR ACCESS TOKEN"
         },
         "introspect": false
       }
