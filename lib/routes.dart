@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mms/blocs/theme/theme_bloc.dart';
 import 'package:mms/screen_router.dart';
 
 class Routes extends StatelessWidget {
@@ -6,25 +8,18 @@ class Routes extends StatelessWidget {
   Widget build(BuildContext context) {
     var screenRouter = ScreenRouter();
 
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-            platform: TargetPlatform.iOS,
-            bottomSheetTheme: BottomSheetThemeData(
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              ),
-            ),
-            appBarTheme: AppBarTheme(
-              elevation: .5,
-            ),
-            // for checkbox
-            fontFamily: 'Avenir',
-            dividerTheme: DividerThemeData(thickness: 1)),
-        onGenerateRoute: screenRouter.generateRoute,
-        onUnknownRoute: screenRouter.unknownRoute,
-        initialRoute: '/',
-    );
+    return BlocProvider(
+        create: (_) => ThemeCubit(),
+        child: BlocBuilder<ThemeCubit, ThemeData>(
+          builder: (_, theme) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              theme: theme,
+              onGenerateRoute: screenRouter.generateRoute,
+              onUnknownRoute: screenRouter.unknownRoute,
+              initialRoute: '/',
+            );
+          },
+        ));
   }
 }

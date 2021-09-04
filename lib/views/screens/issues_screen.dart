@@ -8,6 +8,7 @@ import 'package:mms/data/models/issue_criteria.dart';
 import 'package:mms/data/models/issue_list.dart';
 import 'package:mms/screen_router.dart';
 import 'package:mms/views/widgets/dropdown_widget.dart';
+import 'package:mms/views/widgets/theme_button_widget.dart';
 
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -43,7 +44,7 @@ class _IssuesScreenState extends State<IssuesScreen> {
           } else if (state is IssuesLoaded) _refreshCompleted();
         },
         child: Scaffold(
-          appBar: AppBar(title: Text('Flutter - Issues')),
+          appBar: AppBar(title: Text('Flutter - Issues'), actions: [ThemeButtonWidget()],),
           body: _mainView(),
         ));
   }
