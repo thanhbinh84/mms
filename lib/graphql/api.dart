@@ -56,9 +56,16 @@ class API extends BaseAPI {
     QueryResult result = await request;
 
     if (result.hasException) {
-      String message = result.exception.graphqlErrors.isNotEmpty
-          ? result.exception.graphqlErrors.first.message
-          : result.exception.linkException.toString();
+      String message;
+      if (result.exception.linkException is ServerException) {
+        ServerException? serverException = result.exception.linkException as ServerException;
+        message = serverException.parsedResponse?.errors?.first.message?? 'Something went wrong';
+      } else {
+        message = result.exception.graphqlErrors.isNotEmpty
+            ? result.exception.graphqlErrors.first.message
+            : result.exception.linkException.toString();
+      }
+
       throw Exception(message);
     }
     return result.data;

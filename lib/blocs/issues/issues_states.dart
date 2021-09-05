@@ -1,49 +1,54 @@
 import 'package:equatable/equatable.dart';
+import 'package:mms/data/models/issue_criteria.dart';
 import 'package:mms/data/models/issue_list.dart';
 
 class IssuesState extends Equatable {
-  final List<Object?>? objProps;
-  const IssuesState([this.objProps]);
+  final IssueList issueList;
+  final IssueCriteria issueCriteria;
+  final String error;
 
-  List<Object?> get props => objProps ?? [];
+  const IssuesState(this.issueList, this.issueCriteria, {this.error = ''});
+
+  List<Object?> get props => [issueList, this.issueCriteria, this.error];
 }
 
-class InitialIssueState extends IssuesState {}
+class InitialIssueState extends IssuesState {
+  final IssueList issueList;
+  final IssueCriteria issueCriteria;
+
+  const InitialIssueState(this.issueList, this.issueCriteria) : super(issueList, issueCriteria);
+
+  @override
+  String toString() => 'InitialIssueState';
+}
 
 class IssuesLoading extends IssuesState {
+  final IssueList issueList;
+  final IssueCriteria issueCriteria;
+
+  const IssuesLoading(this.issueList, this.issueCriteria) : super(issueList, issueCriteria);
+
   @override
   String toString() => 'IssuesLoading';
 }
 
-class BaseIssueLoaded extends IssuesState {
+class IssuesLoaded extends IssuesState {
   final IssueList issueList;
-  BaseIssueLoaded({required this.issueList}) : super([issueList]);
-}
+  final IssueCriteria issueCriteria;
 
-class IssuesLoadMore extends BaseIssueLoaded {
-  final IssueList issueList;
-  IssuesLoadMore({required this.issueList}) : super(issueList: issueList);
-
-  @override
-  String toString() => 'IssuesLoadMore ${issueList.currentList.length}';
-}
-
-class IssuesLoaded extends BaseIssueLoaded {
-  final IssueList issueList;
-  IssuesLoaded({required this.issueList}) : super(issueList: issueList);
+  const IssuesLoaded(this.issueList, this.issueCriteria) : super(issueList, issueCriteria);
 
   @override
   String toString() => 'IssuesLoaded ${issueList.currentList.length}';
 }
 
-class AuthenticationUnauthenticated extends IssuesState {
-  @override
-  String toString() => 'AuthenticationUnauthenticated';
-}
-
 class IssuesFailure extends IssuesState {
+  final IssueList issueList;
+  final IssueCriteria issueCriteria;
   final String error;
-  IssuesFailure({required this.error}) : super([error]);
+
+  const IssuesFailure(this.issueList, this.issueCriteria, {this.error = ''})
+      : super(issueList, issueCriteria, error: error);
 
   @override
   String toString() => 'IssuesError $error';

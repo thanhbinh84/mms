@@ -1,6 +1,6 @@
 // ignore: import_of_legacy_library_into_null_safe
-import 'package:flutter/rendering.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -25,7 +25,6 @@ class IssuesScreen extends StatefulWidget {
 class _IssuesScreenState extends State<IssuesScreen> {
   RefreshController _refreshController = RefreshController(initialRefresh: false);
   late IssuesCubit _issuesCubit;
-  IssueCriteria _issueCriteria = IssueCriteria();
 
   @override
   void initState() {
@@ -59,30 +58,27 @@ class _IssuesScreenState extends State<IssuesScreen> {
 
   _mainView() => Column(children: [_criteriaView(), Divider(), Expanded(child: _smartRefresherView())]);
 
-  _criteriaView() => SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Container(
-          width: MediaQuery.of(context).size.width,
-          child: Row(children: [_statusView(), _sortView()], mainAxisAlignment: MainAxisAlignment.start)));
+  _criteriaView() => BlocBuilder<IssuesCubit, IssuesState>(
+      builder: (context, state) => SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Container(
+              width: MediaQuery.of(context).size.width,
+              child: Row(
+                  children: [_statusView(state), _sortView(state)],
+                  mainAxisAlignment: MainAxisAlignment.start))));
 
-  _statusView() => DropdownWidget(
-      onItemSelected: (value) => setState(() {
-            _issueCriteria.status = value as Status;
-            _getIssues();
-          }),
-      currentItem: _issueCriteria.status,
+  _statusView(IssuesState state) => DropdownWidget(
+      onItemSelected: (value) => _getIssues(status: value as Status),
+      currentItem: state.issueCriteria.status,
       itemList: Status.list);
 
-  _sortView() => DropdownWidget(
-      onItemSelected: (value) => setState(() {
-            _issueCriteria.sortBy = value as SortBy;
-            _getIssues();
-          }),
-      currentItem: _issueCriteria.sortBy,
+  _sortView(IssuesState state) => DropdownWidget(
+      onItemSelected: (value) => _getIssues(sortBy: value as SortBy),
+      currentItem: state.issueCriteria.sortBy,
       itemList: SortBy.list);
 
-  void _getIssues({bool loadMore = false}) {
-    _issuesCubit.getIssues(_issueCriteria, loadMore: loadMore);
+  void _getIssues({SortBy? sortBy, Status? status, bool loadMore = false}) {
+    _issuesCubit.getIssues(sortBy: sortBy, status: status, loadMore: loadMore);
   }
 
   _smartRefresherView() {
@@ -94,8 +90,9 @@ class _IssuesScreenState extends State<IssuesScreen> {
             controller: _refreshController,
             onRefresh: _getIssues,
             onLoading: () => _getIssues(loadMore: true),
-            child:
-                state is IssuesLoading ? SpinKitWave(color: Colors.black26, size: 25.0) : _listView(state));
+            child: state is IssuesLoading && state.issueList.currentList.isEmpty
+                ? SpinKitWave(color: Colors.black26, size: 25.0)
+                : _listView(state));
       },
     );
   }
@@ -107,16 +104,14 @@ class _IssuesScreenState extends State<IssuesScreen> {
   }
 
   _listView(IssuesState state) {
-    if (state is BaseIssueLoaded) {
-      List<Issue> issueList = state.issueList.currentList;
-      return issueList.isEmpty
-          ? Center(child: Text('No issue found'))
-          : ListView.builder(
-              itemBuilder: (context, index) => _listItemView(issueList[index]),
-              itemCount: issueList.length,
-            );
-    }
-    return Container();
+    IssueList? issueList = state.issueList;
+    List<Issue> currentList = issueList.currentList;
+    return currentList.isEmpty
+        ? Center(child: Text('No issue found'))
+        : ListView.builder(
+            itemBuilder: (context, index) => _listItemView(currentList[index]),
+            itemCount: currentList.length,
+          );
   }
 
   _listItemView(Issue issue) {
