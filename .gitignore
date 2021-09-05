@@ -48,3 +48,6 @@ app.*.map.json
 # local file
 lib/common/local.dart
 .graphqlconfig
+
+# don't check in golden failure output
+**/failures/*.png

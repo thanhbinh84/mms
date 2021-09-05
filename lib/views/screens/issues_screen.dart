@@ -1,4 +1,5 @@
 // ignore: import_of_legacy_library_into_null_safe
+import 'package:flutter/rendering.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,7 +59,9 @@ class _IssuesScreenState extends State<IssuesScreen> {
 
   _mainView() => Column(children: [_criteriaView(), Divider(), Expanded(child: _smartRefresherView())]);
 
-  _criteriaView() => Row(children: [_statusView(), _sortView()], mainAxisAlignment: MainAxisAlignment.start);
+  _criteriaView() => SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(children: [_statusView(), _sortView()], mainAxisAlignment: MainAxisAlignment.start));
 
   _statusView() => DropdownWidget(
         child: DropdownButton<Status>(
