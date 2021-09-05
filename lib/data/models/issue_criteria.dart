@@ -18,7 +18,7 @@ class Status {
   static const Closed = const Status._internal(IssueState.closed, 'Closed');
   static const All = const Status._internal(IssueState.artemisUnknown, 'All');
 
-  List<IssueState> get arguments => [this.argument];
+  List<IssueState> get arguments => this == All ? [Open.argument, Closed.argument] : [this.argument];
 
   static get list => [Open, Closed, All];
 }

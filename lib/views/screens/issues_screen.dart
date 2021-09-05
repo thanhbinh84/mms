@@ -61,7 +61,7 @@ class _IssuesScreenState extends State<IssuesScreen> {
 
   _criteriaView() => SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: Row(children: [_statusView(), _sortView()], mainAxisAlignment: MainAxisAlignment.start));
+      child: Container(width: MediaQuery.of(context).size.width, child: Row(children: [_statusView(), _sortView()], mainAxisAlignment: MainAxisAlignment.start)));
 
   _statusView() => DropdownWidget(
         child: DropdownButton<Status>(
