@@ -61,45 +61,25 @@ class _IssuesScreenState extends State<IssuesScreen> {
 
   _criteriaView() => SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: Container(width: MediaQuery.of(context).size.width, child: Row(children: [_statusView(), _sortView()], mainAxisAlignment: MainAxisAlignment.start)));
+      child: Container(
+          width: MediaQuery.of(context).size.width,
+          child: Row(children: [_statusView(), _sortView()], mainAxisAlignment: MainAxisAlignment.start)));
 
   _statusView() => DropdownWidget(
-        child: DropdownButton<Status>(
-            value: _issueCriteria.status,
-            icon: const Icon(Icons.keyboard_arrow_down),
-            underline: Container(),
-            iconSize: 24,
-            style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold, fontSize: 15),
-            onChanged: (value) => setState(() {
-                  _issueCriteria.status = value!;
-                  _getIssues();
-                }),
-            items: Status.list.map<DropdownMenuItem<Status>>((Status status) {
-              return DropdownMenuItem<Status>(
-                value: status,
-                child: Text(status.name),
-              );
-            }).toList()),
-      );
+      onItemSelected: (value) => setState(() {
+            _issueCriteria.status = value as Status;
+            _getIssues();
+          }),
+      currentItem: _issueCriteria.status,
+      itemList: Status.list);
 
   _sortView() => DropdownWidget(
-        child: DropdownButton<SortBy>(
-            value: _issueCriteria.sortBy,
-            icon: const Icon(Icons.keyboard_arrow_down),
-            underline: Container(),
-            iconSize: 24,
-            style: Theme.of(context).textTheme.bodyText1!.copyWith(fontWeight: FontWeight.bold, fontSize: 15),
-            onChanged: (value) => setState(() {
-                  _issueCriteria.sortBy = value!;
-                  _getIssues();
-                }),
-            items: SortBy.list.map<DropdownMenuItem<SortBy>>((SortBy sortBy) {
-              return DropdownMenuItem<SortBy>(
-                value: sortBy,
-                child: Text(sortBy.name),
-              );
-            }).toList()),
-      );
+      onItemSelected: (value) => setState(() {
+            _issueCriteria.sortBy = value as SortBy;
+            _getIssues();
+          }),
+      currentItem: _issueCriteria.sortBy,
+      itemList: SortBy.list);
 
   void _getIssues({bool loadMore = false}) {
     _issuesCubit.getIssues(_issueCriteria, loadMore: loadMore);

@@ -12,7 +12,7 @@ class Status {
 
   const Status._internal(this.argument, this.name);
 
-  toString() => 'Enum.$name';
+  toString() => name;
 
   static const Open = const Status._internal(IssueState.open, 'Open');
   static const Closed = const Status._internal(IssueState.closed, 'Closed');
@@ -28,7 +28,7 @@ class SortBy {
 
   const SortBy._internal(this.field, this.direction, this.name);
 
-  toString() => 'Enum.$name';
+  toString() => name;
 
   static const Newest = const SortBy._internal(IssueOrderField.createdAt, OrderDirection.desc, 'Newest');
   static const Oldest = const SortBy._internal(IssueOrderField.createdAt, OrderDirection.asc, 'Oldest');

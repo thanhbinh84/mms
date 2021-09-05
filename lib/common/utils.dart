@@ -7,14 +7,13 @@ class Utils {
         msg: str.toString(),
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 3,
         fontSize: 15.0);
   }
 
   static errorToast(dynamic str) {
     Fluttertoast.showToast(
         msg: str,
-        timeInSecForIosWeb: 3,
+        toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.red,
         textColor: Colors.white,
