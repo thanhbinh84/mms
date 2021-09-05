@@ -14,4 +14,3 @@ jobs:
           channel: stable
       - run: flutter pub get
       - run: flutter test --no-sound-null-safety --update-goldens
-      - run: flutter test
