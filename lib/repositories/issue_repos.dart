@@ -5,6 +5,7 @@ import 'package:mms/graphql/api.dart';
 
 abstract class BaseIssueRepository {
   Future<IssueList> getIssues(IssueList issueList, IssueCriteria issueCriteria);
+  Future<Issue> getIssueDetails(Issue issue);
   Set<Issue> getVisitedIssues();
   setVisitedIssues(Set<Issue> visitedIssues);
 }
@@ -25,5 +26,10 @@ class IssueRepository extends BaseIssueRepository {
   @override
    setVisitedIssues(Set<Issue> visitedIssues) {
     Storage.instance.setVisitedIssues(visitedIssues);
+  }
+
+  @override
+  Future<Issue> getIssueDetails(Issue issue) async {
+    return api.getIssueDetails(issue);
   }
 }

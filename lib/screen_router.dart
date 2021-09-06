@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mms/blocs/issue/issue_bloc.dart';
 import 'package:mms/blocs/issues/issues_bloc.dart';
 import 'package:mms/graphql/api.dart';
 import 'package:mms/repositories/issue_repos.dart';
 import 'package:mms/views/screens/issue_detail_screen.dart';
 import 'package:mms/views/screens/issues_screen.dart';
+import 'package:mms/views/screens/web_view_screen.dart';
 
 class ScreenRouter {
   static const ROOT = '/';
   static const ISSUE_DETAILS = 'ISSUE_DETAILS';
+  static const WEB_VIEW = 'WEB_VIEW';
 
   // ARGUMENTS
   static const ARG_ISSUE = 'ISSUE';
@@ -32,6 +35,8 @@ class ScreenRouter {
         return route(IssuesScreen());
       case ISSUE_DETAILS:
         return route(IssueDetailsScreen(issue: arguments[ARG_ISSUE]));
+      case WEB_VIEW:
+        return route(WebViewScreen(issue: arguments[ARG_ISSUE]));
       default:
         return unknownRoute(settings);
     }
@@ -41,6 +46,11 @@ class ScreenRouter {
     List<BlocProvider> blocProviders = [
       BlocProvider<IssuesCubit>(
         create: (context) => IssuesCubit(
+          issueRepository: issueRepository,
+        ),
+      ),
+      BlocProvider<IssueCubit>(
+        create: (context) => IssueCubit(
           issueRepository: issueRepository,
         ),
       ),

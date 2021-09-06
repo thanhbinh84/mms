@@ -33,6 +33,7 @@ class IssuesCubit extends Cubit<IssuesState> {
   }
 
   addVisitedIssue(Issue issue) {
+    if (_visitedIssue.contains(issue)) return;
     emit(IssuesLoading(_issueList, _issueCriteria));
     _visitedIssue.add(issue);
     issueRepository.setVisitedIssues(_visitedIssue);

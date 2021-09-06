@@ -8,13 +8,31 @@ import 'package:gql/ast.dart';
 part 'graphql_api.graphql.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class GraphqlApi$Query$Repository$Issues$Edges$Node extends JsonSerializable
-    with EquatableMixin {
-  GraphqlApi$Query$Repository$Issues$Edges$Node();
+class Issues$Query$Repository$Issues$Edges$Node$Comments
+    extends JsonSerializable with EquatableMixin {
+  Issues$Query$Repository$Issues$Edges$Node$Comments();
 
-  factory GraphqlApi$Query$Repository$Issues$Edges$Node.fromJson(
+  factory Issues$Query$Repository$Issues$Edges$Node$Comments.fromJson(
           Map<String, dynamic> json) =>
-      _$GraphqlApi$Query$Repository$Issues$Edges$NodeFromJson(json);
+      _$Issues$Query$Repository$Issues$Edges$Node$CommentsFromJson(json);
+
+  late int totalCount;
+
+  @override
+  List<Object?> get props => [totalCount];
+  @override
+  Map<String, dynamic> toJson() =>
+      _$Issues$Query$Repository$Issues$Edges$Node$CommentsToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class Issues$Query$Repository$Issues$Edges$Node extends JsonSerializable
+    with EquatableMixin {
+  Issues$Query$Repository$Issues$Edges$Node();
+
+  factory Issues$Query$Repository$Issues$Edges$Node.fromJson(
+          Map<String, dynamic> json) =>
+      _$Issues$Query$Repository$Issues$Edges$NodeFromJson(json);
 
   int? databaseId;
 
@@ -26,39 +44,44 @@ class GraphqlApi$Query$Repository$Issues$Edges$Node extends JsonSerializable
 
   late int number;
 
+  late DateTime createdAt;
+
+  late Issues$Query$Repository$Issues$Edges$Node$Comments comments;
+
   @override
-  List<Object?> get props => [databaseId, title, url, closed, number];
+  List<Object?> get props =>
+      [databaseId, title, url, closed, number, createdAt, comments];
   @override
   Map<String, dynamic> toJson() =>
-      _$GraphqlApi$Query$Repository$Issues$Edges$NodeToJson(this);
+      _$Issues$Query$Repository$Issues$Edges$NodeToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class GraphqlApi$Query$Repository$Issues$Edges extends JsonSerializable
+class Issues$Query$Repository$Issues$Edges extends JsonSerializable
     with EquatableMixin {
-  GraphqlApi$Query$Repository$Issues$Edges();
+  Issues$Query$Repository$Issues$Edges();
 
-  factory GraphqlApi$Query$Repository$Issues$Edges.fromJson(
+  factory Issues$Query$Repository$Issues$Edges.fromJson(
           Map<String, dynamic> json) =>
-      _$GraphqlApi$Query$Repository$Issues$EdgesFromJson(json);
+      _$Issues$Query$Repository$Issues$EdgesFromJson(json);
 
-  GraphqlApi$Query$Repository$Issues$Edges$Node? node;
+  Issues$Query$Repository$Issues$Edges$Node? node;
 
   @override
   List<Object?> get props => [node];
   @override
   Map<String, dynamic> toJson() =>
-      _$GraphqlApi$Query$Repository$Issues$EdgesToJson(this);
+      _$Issues$Query$Repository$Issues$EdgesToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class GraphqlApi$Query$Repository$Issues$PageInfo extends JsonSerializable
+class Issues$Query$Repository$Issues$PageInfo extends JsonSerializable
     with EquatableMixin {
-  GraphqlApi$Query$Repository$Issues$PageInfo();
+  Issues$Query$Repository$Issues$PageInfo();
 
-  factory GraphqlApi$Query$Repository$Issues$PageInfo.fromJson(
+  factory Issues$Query$Repository$Issues$PageInfo.fromJson(
           Map<String, dynamic> json) =>
-      _$GraphqlApi$Query$Repository$Issues$PageInfoFromJson(json);
+      _$Issues$Query$Repository$Issues$PageInfoFromJson(json);
 
   String? endCursor;
 
@@ -68,57 +91,123 @@ class GraphqlApi$Query$Repository$Issues$PageInfo extends JsonSerializable
   List<Object?> get props => [endCursor, hasNextPage];
   @override
   Map<String, dynamic> toJson() =>
-      _$GraphqlApi$Query$Repository$Issues$PageInfoToJson(this);
+      _$Issues$Query$Repository$Issues$PageInfoToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class GraphqlApi$Query$Repository$Issues extends JsonSerializable
+class Issues$Query$Repository$Issues extends JsonSerializable
     with EquatableMixin {
-  GraphqlApi$Query$Repository$Issues();
+  Issues$Query$Repository$Issues();
 
-  factory GraphqlApi$Query$Repository$Issues.fromJson(
-          Map<String, dynamic> json) =>
-      _$GraphqlApi$Query$Repository$IssuesFromJson(json);
+  factory Issues$Query$Repository$Issues.fromJson(Map<String, dynamic> json) =>
+      _$Issues$Query$Repository$IssuesFromJson(json);
 
-  List<GraphqlApi$Query$Repository$Issues$Edges?>? edges;
+  List<Issues$Query$Repository$Issues$Edges?>? edges;
 
-  late GraphqlApi$Query$Repository$Issues$PageInfo pageInfo;
+  late Issues$Query$Repository$Issues$PageInfo pageInfo;
 
   @override
   List<Object?> get props => [edges, pageInfo];
   @override
-  Map<String, dynamic> toJson() =>
-      _$GraphqlApi$Query$Repository$IssuesToJson(this);
+  Map<String, dynamic> toJson() => _$Issues$Query$Repository$IssuesToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class GraphqlApi$Query$Repository extends JsonSerializable with EquatableMixin {
-  GraphqlApi$Query$Repository();
+class Issues$Query$Repository extends JsonSerializable with EquatableMixin {
+  Issues$Query$Repository();
 
-  factory GraphqlApi$Query$Repository.fromJson(Map<String, dynamic> json) =>
-      _$GraphqlApi$Query$RepositoryFromJson(json);
+  factory Issues$Query$Repository.fromJson(Map<String, dynamic> json) =>
+      _$Issues$Query$RepositoryFromJson(json);
 
-  late GraphqlApi$Query$Repository$Issues issues;
+  late Issues$Query$Repository$Issues issues;
 
   @override
   List<Object?> get props => [issues];
   @override
-  Map<String, dynamic> toJson() => _$GraphqlApi$Query$RepositoryToJson(this);
+  Map<String, dynamic> toJson() => _$Issues$Query$RepositoryToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class GraphqlApi$Query extends JsonSerializable with EquatableMixin {
-  GraphqlApi$Query();
+class Issues$Query extends JsonSerializable with EquatableMixin {
+  Issues$Query();
 
-  factory GraphqlApi$Query.fromJson(Map<String, dynamic> json) =>
-      _$GraphqlApi$QueryFromJson(json);
+  factory Issues$Query.fromJson(Map<String, dynamic> json) =>
+      _$Issues$QueryFromJson(json);
 
-  GraphqlApi$Query$Repository? repository;
+  Issues$Query$Repository? repository;
 
   @override
   List<Object?> get props => [repository];
   @override
-  Map<String, dynamic> toJson() => _$GraphqlApi$QueryToJson(this);
+  Map<String, dynamic> toJson() => _$Issues$QueryToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class Issue$Query$Repository$Issue$Author extends JsonSerializable
+    with EquatableMixin {
+  Issue$Query$Repository$Issue$Author();
+
+  factory Issue$Query$Repository$Issue$Author.fromJson(
+          Map<String, dynamic> json) =>
+      _$Issue$Query$Repository$Issue$AuthorFromJson(json);
+
+  late String avatarUrl;
+
+  late String login;
+
+  @override
+  List<Object?> get props => [avatarUrl, login];
+  @override
+  Map<String, dynamic> toJson() =>
+      _$Issue$Query$Repository$Issue$AuthorToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class Issue$Query$Repository$Issue extends JsonSerializable
+    with EquatableMixin {
+  Issue$Query$Repository$Issue();
+
+  factory Issue$Query$Repository$Issue.fromJson(Map<String, dynamic> json) =>
+      _$Issue$Query$Repository$IssueFromJson(json);
+
+  Issue$Query$Repository$Issue$Author? author;
+
+  late String bodyHTML;
+
+  @override
+  List<Object?> get props => [author, bodyHTML];
+  @override
+  Map<String, dynamic> toJson() => _$Issue$Query$Repository$IssueToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class Issue$Query$Repository extends JsonSerializable with EquatableMixin {
+  Issue$Query$Repository();
+
+  factory Issue$Query$Repository.fromJson(Map<String, dynamic> json) =>
+      _$Issue$Query$RepositoryFromJson(json);
+
+  Issue$Query$Repository$Issue? issue;
+
+  @override
+  List<Object?> get props => [issue];
+  @override
+  Map<String, dynamic> toJson() => _$Issue$Query$RepositoryToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class Issue$Query extends JsonSerializable with EquatableMixin {
+  Issue$Query();
+
+  factory Issue$Query.fromJson(Map<String, dynamic> json) =>
+      _$Issue$QueryFromJson(json);
+
+  Issue$Query$Repository? repository;
+
+  @override
+  List<Object?> get props => [repository];
+  @override
+  Map<String, dynamic> toJson() => _$Issue$QueryToJson(this);
 }
 
 enum IssueState {
@@ -149,16 +238,16 @@ enum OrderDirection {
 }
 
 @JsonSerializable(explicitToJson: true)
-class GraphqlApiArguments extends JsonSerializable with EquatableMixin {
-  GraphqlApiArguments(
+class IssuesArguments extends JsonSerializable with EquatableMixin {
+  IssuesArguments(
       {this.fetchMoreCursor,
       this.state,
       required this.field,
       required this.direction});
 
   @override
-  factory GraphqlApiArguments.fromJson(Map<String, dynamic> json) =>
-      _$GraphqlApiArgumentsFromJson(json);
+  factory IssuesArguments.fromJson(Map<String, dynamic> json) =>
+      _$IssuesArgumentsFromJson(json);
 
   final String? fetchMoreCursor;
 
@@ -174,13 +263,13 @@ class GraphqlApiArguments extends JsonSerializable with EquatableMixin {
   @override
   List<Object?> get props => [fetchMoreCursor, state, field, direction];
   @override
-  Map<String, dynamic> toJson() => _$GraphqlApiArgumentsToJson(this);
+  Map<String, dynamic> toJson() => _$IssuesArgumentsToJson(this);
 }
 
-final GRAPHQL_API_QUERY_DOCUMENT = DocumentNode(definitions: [
+final ISSUES_QUERY_DOCUMENT = DocumentNode(definitions: [
   OperationDefinitionNode(
       type: OperationType.query,
-      name: null,
+      name: NameNode(value: 'Issues'),
       variableDefinitions: [
         VariableDefinitionNode(
             variable: VariableNode(name: NameNode(value: 'fetchMoreCursor')),
@@ -294,7 +383,26 @@ final GRAPHQL_API_QUERY_DOCUMENT = DocumentNode(definitions: [
                                     alias: null,
                                     arguments: [],
                                     directives: [],
-                                    selectionSet: null)
+                                    selectionSet: null),
+                                FieldNode(
+                                    name: NameNode(value: 'createdAt'),
+                                    alias: null,
+                                    arguments: [],
+                                    directives: [],
+                                    selectionSet: null),
+                                FieldNode(
+                                    name: NameNode(value: 'comments'),
+                                    alias: null,
+                                    arguments: [],
+                                    directives: [],
+                                    selectionSet: SelectionSetNode(selections: [
+                                      FieldNode(
+                                          name: NameNode(value: 'totalCount'),
+                                          alias: null,
+                                          arguments: [],
+                                          directives: [],
+                                          selectionSet: null)
+                                    ]))
                               ]))
                         ])),
                     FieldNode(
@@ -321,22 +429,120 @@ final GRAPHQL_API_QUERY_DOCUMENT = DocumentNode(definitions: [
       ]))
 ]);
 
-class GraphqlApiQuery
-    extends GraphQLQuery<GraphqlApi$Query, GraphqlApiArguments> {
-  GraphqlApiQuery({required this.variables});
+class IssuesQuery extends GraphQLQuery<Issues$Query, IssuesArguments> {
+  IssuesQuery({required this.variables});
 
   @override
-  final DocumentNode document = GRAPHQL_API_QUERY_DOCUMENT;
+  final DocumentNode document = ISSUES_QUERY_DOCUMENT;
 
   @override
-  final String operationName = 'graphql_api';
+  final String operationName = 'Issues';
 
   @override
-  final GraphqlApiArguments variables;
+  final IssuesArguments variables;
 
   @override
   List<Object?> get props => [document, operationName, variables];
   @override
-  GraphqlApi$Query parse(Map<String, dynamic> json) =>
-      GraphqlApi$Query.fromJson(json);
+  Issues$Query parse(Map<String, dynamic> json) => Issues$Query.fromJson(json);
+}
+
+@JsonSerializable(explicitToJson: true)
+class IssueArguments extends JsonSerializable with EquatableMixin {
+  IssueArguments({required this.number});
+
+  @override
+  factory IssueArguments.fromJson(Map<String, dynamic> json) =>
+      _$IssueArgumentsFromJson(json);
+
+  late int number;
+
+  @override
+  List<Object?> get props => [number];
+  @override
+  Map<String, dynamic> toJson() => _$IssueArgumentsToJson(this);
+}
+
+final ISSUE_QUERY_DOCUMENT = DocumentNode(definitions: [
+  OperationDefinitionNode(
+      type: OperationType.query,
+      name: NameNode(value: 'Issue'),
+      variableDefinitions: [
+        VariableDefinitionNode(
+            variable: VariableNode(name: NameNode(value: 'number')),
+            type: NamedTypeNode(name: NameNode(value: 'Int'), isNonNull: true),
+            defaultValue: DefaultValueNode(value: null),
+            directives: [])
+      ],
+      directives: [],
+      selectionSet: SelectionSetNode(selections: [
+        FieldNode(
+            name: NameNode(value: 'repository'),
+            alias: null,
+            arguments: [
+              ArgumentNode(
+                  name: NameNode(value: 'owner'),
+                  value: StringValueNode(value: 'flutter', isBlock: false)),
+              ArgumentNode(
+                  name: NameNode(value: 'name'),
+                  value: StringValueNode(value: 'flutter', isBlock: false))
+            ],
+            directives: [],
+            selectionSet: SelectionSetNode(selections: [
+              FieldNode(
+                  name: NameNode(value: 'issue'),
+                  alias: null,
+                  arguments: [
+                    ArgumentNode(
+                        name: NameNode(value: 'number'),
+                        value: VariableNode(name: NameNode(value: 'number')))
+                  ],
+                  directives: [],
+                  selectionSet: SelectionSetNode(selections: [
+                    FieldNode(
+                        name: NameNode(value: 'author'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: SelectionSetNode(selections: [
+                          FieldNode(
+                              name: NameNode(value: 'avatarUrl'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null),
+                          FieldNode(
+                              name: NameNode(value: 'login'),
+                              alias: null,
+                              arguments: [],
+                              directives: [],
+                              selectionSet: null)
+                        ])),
+                    FieldNode(
+                        name: NameNode(value: 'bodyHTML'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null)
+                  ]))
+            ]))
+      ]))
+]);
+
+class IssueQuery extends GraphQLQuery<Issue$Query, IssueArguments> {
+  IssueQuery({required this.variables});
+
+  @override
+  final DocumentNode document = ISSUE_QUERY_DOCUMENT;
+
+  @override
+  final String operationName = 'Issue';
+
+  @override
+  final IssueArguments variables;
+
+  @override
+  List<Object?> get props => [document, operationName, variables];
+  @override
+  Issue$Query parse(Map<String, dynamic> json) => Issue$Query.fromJson(json);
 }

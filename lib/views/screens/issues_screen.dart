@@ -55,12 +55,14 @@ class _IssuesScreenState extends State<IssuesScreen> {
     _refreshController.loadComplete();
   }
 
-  _mainView() => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [_criteriaView(), Divider(), Expanded(child: _smartRefresherView())]);
+  _mainView() => Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [_criteriaView(), Divider(), Expanded(child: _smartRefresherView())]);
 
   _criteriaView() => BlocBuilder<IssuesCubit, IssuesState>(
       builder: (context, state) => SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Row(children: [_statusView(state), _sortView(state)])));
+          child: Row(children: [_statusView(state), _sortView(state), SizedBox(width: 15)])));
 
   _statusView(IssuesState state) => DropdownWidget(
       onItemSelected: (value) => _getIssues(status: value as Status),
@@ -82,7 +84,7 @@ class _IssuesScreenState extends State<IssuesScreen> {
             onRefresh: _getIssues,
             onLoading: () => _getIssues(loadMore: true),
             child: state is IssuesLoading && state.issueList.currentList.isEmpty
-                ? SpinKitWave(color: Colors.black26, size: 25.0)
+                ? SpinKitWave(color: Theme.of(context).accentColor, size: 25.0)
                 : _listView(state));
       },
     );
@@ -94,45 +96,17 @@ class _IssuesScreenState extends State<IssuesScreen> {
     return currentList.isEmpty
         ? Center(child: Text('No issue found'))
         : ListView.builder(
-      itemBuilder: (context, index) => _listItemView(currentList[index]),
-      itemCount: currentList.length,
-    );
+            itemBuilder: (context, index) => _listItemView(currentList[index]),
+            itemCount: currentList.length,
+          );
   }
 
   _listItemView(Issue issue) {
     return InkWell(
       child: Padding(
         padding: const EdgeInsets.only(top: 10),
-        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: issue.closed
-                ? Icon(
-              Icons.check_circle_outline,
-              color: Theme.of(context).errorColor,
-            )
-                : Icon(
-              Icons.stop_circle_outlined,
-              color: Theme.of(context).accentColor,
-            ),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('flutter/flutter #${issue.number}', style: Theme.of(context).textTheme.bodyText2),
-                SizedBox(height: 8),
-                Text(issue.title ?? '',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(fontWeight: issue.isVisited ? FontWeight.normal : FontWeight.bold)),
-                SizedBox(height: 10),
-                Divider(height: 1)
-              ],
-            ),
-          )
-        ]),
+        child:
+            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [_listIcon(issue), _listText(issue)]),
       ),
       onTap: () => _goToIssueDetailsScreen(issue),
     );
@@ -146,5 +120,88 @@ class _IssuesScreenState extends State<IssuesScreen> {
     await Navigator.pushNamed(context, ScreenRouter.ISSUE_DETAILS,
         arguments: {ScreenRouter.ARG_ISSUE: issue});
     _issuesCubit.addVisitedIssue(issue);
+  }
+
+  _listIcon(issue) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: issue.closed
+            ? Icon(
+                Icons.check_circle_outline,
+                color: Theme.of(context).errorColor,
+              )
+            : Icon(
+                Icons.stop_circle_outlined,
+                color: Theme.of(context).accentColor,
+              ),
+      );
+
+  _listText(Issue issue) => Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text(
+                        'flutter/flutter #${issue.number}',
+                        style: Theme.of(context).textTheme.bodyText2,
+                        textAlign: TextAlign.start,
+                      ),
+                      SizedBox(height: 8),
+                      Text(issue.title ?? '',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .copyWith(fontWeight: issue.isVisited ? FontWeight.normal : FontWeight.bold)),
+                      _totalCommentView(issue),
+                      SizedBox(height: 10),
+                    ],
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                  ),
+                ),
+                _listDate(issue)
+              ],
+              crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+            Divider(height: 1)
+          ],
+        ),
+      );
+
+  _listDate(Issue issue) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Text(issue.duration, style: Theme.of(context).textTheme.bodyText2),
+      );
+
+  _totalCommentView(Issue issue) {
+    TextStyle textTheme = Theme.of(context).textTheme.bodyText2!;
+    Color statusColor = textTheme.color!;
+
+    return issue.totalComments == 0
+        ? Container()
+        : Container(
+            margin: EdgeInsets.only(top: 5),
+            padding: EdgeInsets.only(top: 2, bottom: 2, left: 8, right: 7),
+            decoration: BoxDecoration(
+              border: Border.all(color: statusColor.withOpacity(0.3), width: 0.5),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.chat,
+                  color: statusColor,
+                  size: 11,
+                ),
+                SizedBox(width: 5),
+                Text(
+                  issue.totalComments.toString(),
+                  style: textTheme.copyWith(fontSize: 13),
+                ),
+              ],
+            ));
   }
 }

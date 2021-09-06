@@ -1,4 +1,4 @@
-query ($fetchMoreCursor: String, $state: [IssueState!], $field: IssueOrderField!, $direction: OrderDirection!) {
+query Issues ($fetchMoreCursor: String, $state: [IssueState!], $field: IssueOrderField!, $direction: OrderDirection!) {
     repository(owner:"flutter", name:"flutter") {
         issues (first: 20, states: $state, after: $fetchMoreCursor, orderBy: {field: $field, direction: $direction}) {
             edges {
@@ -8,6 +8,10 @@ query ($fetchMoreCursor: String, $state: [IssueState!], $field: IssueOrderField!
                     url
                     closed
                     number
+                    createdAt
+                    comments {
+                        totalCount
+                    }
                 }
             }
             pageInfo {

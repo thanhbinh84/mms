@@ -16,8 +16,13 @@ class MockAPI extends BaseAPI {
 
   @override
   Future<IssueList> getIssues(IssueList issueList, IssueCriteria issueCriteria) async {
-    issueList.updateData(GraphqlApi$Query.fromJson(decodeIssuesResponse['data']).repository!.issues);
+    issueList.updateData(Issues$Query.fromJson(decodeIssuesResponse['data']).repository!.issues);
     return issueList;
+  }
+
+  @override
+  Future<Issue> getIssueDetails(Issue issue) {
+    throw UnimplementedError();
   }
 }
 

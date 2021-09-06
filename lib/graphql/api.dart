@@ -4,12 +4,14 @@ import 'package:http/io_client.dart';
 import 'package:mms/common/local.dart';
 import 'package:mms/data/models/issue_criteria.dart';
 import 'package:mms/data/models/issue_list.dart';
-import 'package:mms/graphql/graphql_api.graphql.dart';
+import 'package:mms/graphql/graphql_api.dart';
 
 const ACCESS_POINT = 'https://api.github.com/graphql';
 
 abstract class BaseAPI {
   Future<IssueList> getIssues(IssueList issueList, IssueCriteria issueCriteria);
+
+  Future<Issue> getIssueDetails(Issue issue);
 }
 
 class API extends BaseAPI {
@@ -39,16 +41,26 @@ class API extends BaseAPI {
   }
 
   Future<IssueList> getIssues(IssueList issueList, IssueCriteria issueCriteria) async {
-    var arg = GraphqlApiArguments(
+    var arg = IssuesArguments(
         fetchMoreCursor: issueList.endCursor,
         state: issueCriteria.status.arguments,
         field: issueCriteria.sortBy.field,
         direction: issueCriteria.sortBy.direction);
     QueryOptions queryOptions =
-        QueryOptions(document: GraphqlApiQuery(variables: arg).document, variables: arg.toJson());
-    Map<String,dynamic> data = await _handleResponse(_graphQLClient.query(queryOptions));
-    issueList.updateData(GraphqlApi$Query.fromJson(data).repository!.issues);
+        QueryOptions(document: IssuesQuery(variables: arg).document, variables: arg.toJson());
+    Map<String, dynamic> data = await _handleResponse(_graphQLClient.query(queryOptions));
+    issueList.updateData(Issues$Query.fromJson(data).repository!.issues);
     return issueList;
+  }
+
+  @override
+  Future<Issue> getIssueDetails(Issue issue) async {
+    var arg = IssueArguments(number: issue.number);
+    QueryOptions queryOptions =
+        QueryOptions(document: IssueQuery(variables: arg).document, variables: arg.toJson());
+    Map<String, dynamic> data = await _handleResponse(_graphQLClient.query(queryOptions));
+    issue.updateData(Issue$Query.fromJson(data).repository!.issue);
+    return issue;
   }
 
   Future _handleResponse(Future<QueryResult> request) async {
@@ -64,7 +76,7 @@ class API extends BaseAPI {
         if (serverException.originalException is SocketException)
           message = 'Cannot reach server';
         else
-          message = serverException.parsedResponse?.errors?.first.message?? '';
+          message = serverException.parsedResponse?.errors?.first.message ?? '';
       }
       if (message.isEmpty) message = 'Something went wrong';
 

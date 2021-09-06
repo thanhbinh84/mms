@@ -34,6 +34,7 @@ dependencies:
   webview_flutter: ^2.0.12
   shared_preferences: ^2.0.5
   fluttertoast: ^8.0.6
+  flutter_html: ^2.1.2
   # Graphql
   equatable: ^2.0.3
   graphql_flutter: ^5.0.0
