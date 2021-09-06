@@ -38,7 +38,11 @@ const data = """
               "title": "Cascading menus",
               "url": "https://github.com/flutter/flutter/issues/2242",
               "closed": false,
-              "number": 2242
+              "number": 2242,
+              "createdAt": "2016-02-27T00:42:18Z",
+              "comments": {
+                "totalCount": 0
+              }
             }
           },
           {
@@ -47,7 +51,11 @@ const data = """
               "title": "We should document font-family mapping conventions",
               "url": "https://github.com/flutter/flutter/issues/2458",
               "closed": false,
-              "number": 2458
+              "number": 2458,
+              "createdAt": "2016-02-27T00:42:18Z",
+              "comments": {
+                "totalCount": 0
+              }
             }
           }
         ],
