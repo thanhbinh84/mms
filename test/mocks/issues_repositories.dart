@@ -4,8 +4,8 @@ import 'dart:convert';
 
 import 'package:mms/data/models/issue_criteria.dart';
 import 'package:mms/data/models/issue_list.dart';
-import 'package:mms/graphql/api.dart';
-import 'package:mms/graphql/graphql_api.graphql.dart';
+import 'package:mms/data/remote/graphql/api.dart';
+import 'package:mms/data/remote/graphql/graphql_api.graphql.dart';
 
 class MockAPI extends BaseAPI {
   final results = QueryResult(

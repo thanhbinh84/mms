@@ -5,7 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mms/blocs/issue/issue_bloc.dart';
 import 'package:mms/blocs/issue/issue_states.dart';
 import 'package:mms/data/models/issue_list.dart';
-import 'package:mms/screen_router.dart';
+import 'package:mms/views/root/screen_router.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 class IssueDetailsScreen extends StatefulWidget {
@@ -55,6 +55,7 @@ class _IssueDetailsScreenState extends State<IssueDetailsScreen> {
       Issue issue = state.issue;
       return SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _headerView(issue),
             Divider(thickness: 10),
@@ -70,7 +71,7 @@ class _IssueDetailsScreenState extends State<IssueDetailsScreen> {
     Color statusColor = issue.closed ? Theme.of(context).errorColor : Theme.of(context).accentColor;
     TextTheme textTheme = Theme.of(context).textTheme;
     return Padding(
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

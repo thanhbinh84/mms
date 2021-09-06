@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mms/data/models/issue_criteria.dart';
 import 'package:mms/data/models/issue_list.dart';
-import 'package:mms/repositories/issue_repos.dart';
+import 'package:mms/data/repositories/issue_repos.dart';
 
 import '../mocks/issues_repositories.dart';
 

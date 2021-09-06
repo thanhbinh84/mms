@@ -4,7 +4,7 @@ import 'package:http/io_client.dart';
 import 'package:mms/common/local.dart';
 import 'package:mms/data/models/issue_criteria.dart';
 import 'package:mms/data/models/issue_list.dart';
-import 'package:mms/graphql/graphql_api.dart';
+import 'package:mms/data/remote/graphql/graphql_api.dart';
 
 const ACCESS_POINT = 'https://api.github.com/graphql';
 

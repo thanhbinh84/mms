@@ -8,7 +8,7 @@ import 'package:mms/blocs/issues/issues_states.dart';
 import 'package:mms/common/utils.dart';
 import 'package:mms/data/models/issue_criteria.dart';
 import 'package:mms/data/models/issue_list.dart';
-import 'package:mms/screen_router.dart';
+import 'package:mms/views/root/screen_router.dart';
 import 'package:mms/views/widgets/dropdown_widget.dart';
 import 'package:mms/views/widgets/theme_button.dart';
 

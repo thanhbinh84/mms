@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:mms/blocs/issues/issues_states.dart';
 import 'package:mms/data/models/issue_criteria.dart';
 import 'package:mms/data/models/issue_list.dart';
-import 'package:mms/repositories/issue_repos.dart';
+import 'package:mms/data/repositories/issue_repos.dart';
 
 class IssuesCubit extends Cubit<IssuesState> {
   final BaseIssueRepository issueRepository;

@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:mms/blocs/issues/issues_bloc.dart';
 import 'package:mms/blocs/theme/theme_bloc.dart';
-import 'package:mms/repositories/issue_repos.dart';
+import 'package:mms/data/repositories/issue_repos.dart';
 import 'package:mms/views/screens/issues_screen.dart';
 
 import '../../mocks/issues_repositories.dart';

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mms/graphql/graphql_api.graphql.dart';
+import 'package:mms/data/remote/graphql/graphql_api.graphql.dart';
 
 class Issue extends Equatable {
   String? title;

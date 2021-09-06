@@ -13,41 +13,28 @@ class IssuesState extends Equatable {
 }
 
 class InitialIssueState extends IssuesState {
-  final IssueList issueList;
-  final IssueCriteria issueCriteria;
-
-  const InitialIssueState(this.issueList, this.issueCriteria) : super(issueList, issueCriteria);
+  const InitialIssueState(issueList, issueCriteria) : super(issueList, issueCriteria);
 
   @override
   String toString() => 'InitialIssueState';
 }
 
 class IssuesLoading extends IssuesState {
-  final IssueList issueList;
-  final IssueCriteria issueCriteria;
-
-  const IssuesLoading(this.issueList, this.issueCriteria) : super(issueList, issueCriteria);
+  const IssuesLoading(issueList, issueCriteria) : super(issueList, issueCriteria);
 
   @override
   String toString() => 'IssuesLoading';
 }
 
 class IssuesLoaded extends IssuesState {
-  final IssueList issueList;
-  final IssueCriteria issueCriteria;
-
-  const IssuesLoaded(this.issueList, this.issueCriteria) : super(issueList, issueCriteria);
+  const IssuesLoaded(issueList, issueCriteria) : super(issueList, issueCriteria);
 
   @override
   String toString() => 'IssuesLoaded ${issueList.currentList.length}';
 }
 
 class IssuesFailure extends IssuesState {
-  final IssueList issueList;
-  final IssueCriteria issueCriteria;
-  final String error;
-
-  const IssuesFailure(this.issueList, this.issueCriteria, {this.error = ''})
+  const IssuesFailure(issueList, issueCriteria, {error})
       : super(issueList, issueCriteria, error: error);
 
   @override

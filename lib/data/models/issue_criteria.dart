@@ -1,4 +1,5 @@
-import 'package:mms/graphql/graphql_api.dart';
+
+import 'package:mms/data/remote/graphql/graphql_api.graphql.dart';
 
 class IssueCriteria {
   Status status;

@@ -2,15 +2,15 @@ targets:
   $default:
     sources:
       - lib/**
-      - lib/graphql/commands/**
+      - lib/data/remote/graphql/commands/**
       - schema.graphql
     builders:
       artemis:
         options:
           schema_mapping:
             - schema: schema.graphql
-              queries_glob: lib/graphql/commands/*.graphql
-              output: lib/graphql/graphql_api.dart
+              queries_glob: lib/data/remote/graphql/commands/*.graphql
+              output: lib//data/remote/graphql/graphql_api.dart
               naming_scheme: pathedWithFields
           scalar_mapping:
             - graphql_type: URI
