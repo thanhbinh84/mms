@@ -55,16 +55,12 @@ class _IssuesScreenState extends State<IssuesScreen> {
     _refreshController.loadComplete();
   }
 
-  _mainView() => Column(children: [_criteriaView(), Divider(), Expanded(child: _smartRefresherView())]);
+  _mainView() => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [_criteriaView(), Divider(), Expanded(child: _smartRefresherView())]);
 
   _criteriaView() => BlocBuilder<IssuesCubit, IssuesState>(
       builder: (context, state) => SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: Row(
-                  children: [_statusView(state), _sortView(state)],
-                  mainAxisAlignment: MainAxisAlignment.start))));
+          child: Row(children: [_statusView(state), _sortView(state)])));
 
   _statusView(IssuesState state) => DropdownWidget(
       onItemSelected: (value) => _getIssues(status: value as Status),
@@ -75,10 +71,6 @@ class _IssuesScreenState extends State<IssuesScreen> {
       onItemSelected: (value) => _getIssues(sortBy: value as SortBy),
       currentItem: state.issueCriteria.sortBy,
       itemList: SortBy.list);
-
-  void _getIssues({SortBy? sortBy, Status? status, bool loadMore = false}) {
-    _issuesCubit.getIssues(sortBy: sortBy, status: status, loadMore: loadMore);
-  }
 
   _smartRefresherView() {
     return BlocBuilder<IssuesCubit, IssuesState>(
@@ -96,21 +88,15 @@ class _IssuesScreenState extends State<IssuesScreen> {
     );
   }
 
-  _goToIssueDetailsScreen(Issue issue) async {
-    await Navigator.pushNamed(context, ScreenRouter.ISSUE_DETAILS,
-        arguments: {ScreenRouter.ARG_ISSUE: issue});
-    _issuesCubit.addVisitedIssue(issue);
-  }
-
   _listView(IssuesState state) {
     IssueList? issueList = state.issueList;
     List<Issue> currentList = issueList.currentList;
     return currentList.isEmpty
         ? Center(child: Text('No issue found'))
         : ListView.builder(
-            itemBuilder: (context, index) => _listItemView(currentList[index]),
-            itemCount: currentList.length,
-          );
+      itemBuilder: (context, index) => _listItemView(currentList[index]),
+      itemCount: currentList.length,
+    );
   }
 
   _listItemView(Issue issue) {
@@ -122,13 +108,13 @@ class _IssuesScreenState extends State<IssuesScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: issue.closed
                 ? Icon(
-                    Icons.check_circle_outline,
-                    color: Theme.of(context).errorColor,
-                  )
+              Icons.check_circle_outline,
+              color: Theme.of(context).errorColor,
+            )
                 : Icon(
-                    Icons.stop_circle_outlined,
-                    color: Theme.of(context).accentColor,
-                  ),
+              Icons.stop_circle_outlined,
+              color: Theme.of(context).accentColor,
+            ),
           ),
           Expanded(
             child: Column(
@@ -150,5 +136,15 @@ class _IssuesScreenState extends State<IssuesScreen> {
       ),
       onTap: () => _goToIssueDetailsScreen(issue),
     );
+  }
+
+  _getIssues({SortBy? sortBy, Status? status, bool loadMore = false}) {
+    _issuesCubit.getIssues(sortBy: sortBy, status: status, loadMore: loadMore);
+  }
+
+  _goToIssueDetailsScreen(Issue issue) async {
+    await Navigator.pushNamed(context, ScreenRouter.ISSUE_DETAILS,
+        arguments: {ScreenRouter.ARG_ISSUE: issue});
+    _issuesCubit.addVisitedIssue(issue);
   }
 }
