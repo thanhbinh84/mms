@@ -24,7 +24,7 @@ class ScreenRouter {
 
   Route<dynamic> generateRoute(RouteSettings settings) {
     var route = buildPageRoute(settings);
-    Map? arguments = settings.arguments as Map;
+    Map arguments = (settings.arguments?? {})  as Map;
 
     print('>>>>>>> GOTO: ${settings.name}');
     switch (settings.name) {

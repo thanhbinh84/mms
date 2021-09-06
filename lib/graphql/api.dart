@@ -1,4 +1,3 @@
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'dart:io';
 import 'package:http/io_client.dart';
@@ -57,13 +56,13 @@ class API extends BaseAPI {
 
     if (result.hasException) {
       String message;
-      if (result.exception.linkException is ServerException) {
-        ServerException? serverException = result.exception.linkException as ServerException;
+      if (result.exception!.linkException is ServerException) {
+        ServerException? serverException = result.exception!.linkException as ServerException;
         message = serverException.parsedResponse?.errors?.first.message?? 'Something went wrong';
       } else {
-        message = result.exception.graphqlErrors.isNotEmpty
-            ? result.exception.graphqlErrors.first.message
-            : result.exception.linkException.toString();
+        message = result.exception!.graphqlErrors.isNotEmpty
+            ? result.exception!.graphqlErrors.first.message
+            : result.exception!.linkException.toString();
       }
 
       throw Exception(message);
