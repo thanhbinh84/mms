@@ -55,15 +55,18 @@ class API extends BaseAPI {
     QueryResult result = await request;
 
     if (result.hasException) {
-      String message;
-      if (result.exception!.linkException is ServerException) {
+      String message = '';
+      LinkException? linkException = result.exception!.linkException;
+      if (linkException == null)
+        message = result.exception!.graphqlErrors.first.message;
+      else if (linkException is ServerException) {
         ServerException? serverException = result.exception!.linkException as ServerException;
-        message = serverException.parsedResponse?.errors?.first.message?? 'Something went wrong';
-      } else {
-        message = result.exception!.graphqlErrors.isNotEmpty
-            ? result.exception!.graphqlErrors.first.message
-            : result.exception!.linkException.toString();
+        if (serverException.originalException is SocketException)
+          message = 'Cannot reach server';
+        else
+          message = serverException.parsedResponse?.errors?.first.message?? '';
       }
+      if (message.isEmpty) message = 'Something went wrong';
 
       throw Exception(message);
     }
