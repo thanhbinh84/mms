@@ -9,8 +9,8 @@ class IssueCubit extends Cubit<IssueState> {
 
   getIssue(Issue issue) async {
     try {
-      emit(IssueLoading());
-      emit(IssueLoaded(issue: await issueRepository.getIssueDetails(issue)));
+      emit(IssueLoadInProgress());
+      emit(IssueLoadSuccess(issue: await issueRepository.getIssueDetails(issue)));
     } catch (e) {
       emit(IssueFailure(error: e.toString()));
     }

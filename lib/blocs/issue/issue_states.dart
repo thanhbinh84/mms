@@ -8,18 +8,18 @@ class IssueState extends Equatable {
   List<Object?> get props => objProps ?? [];
 }
 
-class IssueLoading extends IssueState {
+class IssueLoadInProgress extends IssueState {
   @override
-  String toString() => 'IssueLoading';
+  String toString() => 'IssueLoadInProgress';
 }
 
-class IssueLoaded extends IssueState {
+class IssueLoadSuccess extends IssueState {
   final Issue issue;
 
-  IssueLoaded({required this.issue}) : super([issue]);
+  IssueLoadSuccess({required this.issue}) : super([issue]);
 
   @override
-  String toString() => 'IssueLoaded $issue';
+  String toString() => 'IssueLoadSuccess $issue';
 }
 
 class IssueFailure extends IssueState {

@@ -6,38 +6,50 @@ import 'package:mms/data/repositories/issue_repos.dart';
 
 class IssuesCubit extends Cubit<IssuesState> {
   final BaseIssueRepository issueRepository;
-  IssueList _issueList = IssueList();
-  IssueCriteria _issueCriteria = IssueCriteria();
   Set<Issue> _visitedIssue = Set();
 
-  IssuesCubit({
-    required this.issueRepository,
-  }) : super(IssuesState(IssueList(), IssueCriteria()));
+  IssuesCubit({required this.issueRepository}) : super(IssuesInitial());
 
   getIssues({bool loadMore = false, SortBy? sortBy, Status? status}) async {
     try {
-      if (!loadMore || sortBy != null || status != null) _issueList = IssueList();
-      emit(IssuesLoading(_issueList, _issueCriteria));
+      IssueList _issueList = IssueList();
+      IssueCriteria _issueCriteria = IssueCriteria();
+
+      if (state is IssuesLoadSuccess) {
+        IssuesLoadSuccess issuesLoaded = state as IssuesLoadSuccess;
+        if (loadMore)
+          _issueList = issuesLoaded.issueList;
+        _issueCriteria = issuesLoaded.issueCriteria;
+      }
+
       if (sortBy != null) _issueCriteria.sortBy = sortBy;
       if (status != null) _issueCriteria.status = status;
 
-      _issueList = await issueRepository.getIssues(_issueList, _issueCriteria);
+      if (!loadMore) emit(IssuesLoadInProgress());
+
+      IssueList newIssueList = await issueRepository.getIssues(_issueList, _issueCriteria);
       _visitedIssue = issueRepository.getVisitedIssues();
-      _issueList.currentList.where((issue) => _visitedIssue.contains(issue)).forEach((issue) {
+      newIssueList.currentList.where((issue) => _visitedIssue.contains(issue)).forEach((issue) {
         issue.isVisited = true;
       });
-      emit(IssuesLoaded(_issueList, _issueCriteria));
+      newIssueList.currentList.insertAll(0, _issueList.currentList);
+      emit(IssuesLoadSuccess(issueList: newIssueList, issueCriteria: _issueCriteria));
     } catch (e) {
-      emit(IssuesFailure(_issueList, _issueCriteria, error: e.toString()));
+      emit(IssuesFailure(e.toString()));
     }
   }
 
   addVisitedIssue(Issue issue) {
     if (_visitedIssue.contains(issue)) return;
-    emit(IssuesLoading(_issueList, _issueCriteria));
     _visitedIssue.add(issue);
     issueRepository.setVisitedIssues(_visitedIssue);
-    _issueList.currentList.firstWhere((element) => element == issue).isVisited = true;
-    emit(IssuesLoaded(_issueList, _issueCriteria));
+    if (state is IssuesLoadSuccess) {
+      IssuesLoadSuccess issuesLoaded = state as IssuesLoadSuccess;
+      issuesLoaded.issueList.currentList.firstWhere((element) => element == issue).isVisited = true;
+      emit(IssuesLoadInProgress()); // force reload
+      emit(IssuesLoadSuccess(issueList: issuesLoaded.issueList, issueCriteria: issuesLoaded.issueCriteria));
+    }
   }
 }
+
+
