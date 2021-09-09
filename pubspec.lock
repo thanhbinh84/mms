@@ -541,15 +541,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-  modal_progress_hud:
+  modal_progress_hud_nsn:
     dependency: "direct main"
     description:
-      path: "."
-      ref: master
-      resolved-ref: ecbc038f7383b90ff478b0c2455f3154fa555d53
-      url: "https://github.com/luis901101/modal_progress_hud.git"
-    source: git
-    version: "1.0.0"
+      name: modal_progress_hud_nsn
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0-nullsafety-1"
   nested:
     dependency: transitive
     description:

@@ -1,7 +1,6 @@
-import 'package:equatable/equatable.dart';
 import 'package:mms/data/remote/graphql/graphql_api.graphql.dart';
 
-class Issue extends Equatable {
+class Issue {
   String? title;
   String? url;
   int? id;
@@ -41,7 +40,10 @@ class Issue extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id];
+  bool operator ==(Object other) => other is Issue && id == other.id;
+
+  @override
+  int get hashCode => id?? 0;
 
   get duration {
     DateTime now = DateTime.now();
@@ -83,7 +85,7 @@ class IssueList {
 
   IssueList();
 
-  updateData(Issues$Query$Repository$Issues issues) {
+  IssueList.fromJson(Issues$Query$Repository$Issues issues) {
     if (issues.edges != null)
       currentList.addAll(issues.edges!.map((edge) => Issue.fromNode(edge!.node)));
     hasNextPage = issues.pageInfo.hasNextPage;

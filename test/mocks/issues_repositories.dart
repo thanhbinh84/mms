@@ -16,8 +16,7 @@ class MockAPI extends BaseAPI {
 
   @override
   Future<IssueList> getIssues(IssueList issueList, IssueCriteria issueCriteria) async {
-    issueList.updateData(Issues$Query.fromJson(decodeIssuesResponse['data']).repository!.issues);
-    return issueList;
+    return IssueList.fromJson(Issues$Query.fromJson(decodeIssuesResponse['data']).repository!.issues);
   }
 
   @override

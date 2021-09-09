@@ -174,8 +174,10 @@ class Issue$Query$Repository$Issue extends JsonSerializable
 
   late String bodyHTML;
 
+  late String body;
+
   @override
-  List<Object?> get props => [author, bodyHTML];
+  List<Object?> get props => [author, bodyHTML, body];
   @override
   Map<String, dynamic> toJson() => _$Issue$Query$Repository$IssueToJson(this);
 }
@@ -520,6 +522,12 @@ final ISSUE_QUERY_DOCUMENT = DocumentNode(definitions: [
                         ])),
                     FieldNode(
                         name: NameNode(value: 'bodyHTML'),
+                        alias: null,
+                        arguments: [],
+                        directives: [],
+                        selectionSet: null),
+                    FieldNode(
+                        name: NameNode(value: 'body'),
                         alias: null,
                         arguments: [],
                         directives: [],

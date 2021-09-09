@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:mms/blocs/issue/issue_bloc.dart';
+import 'package:mms/blocs/issue/issue_cubit.dart';
 import 'package:mms/blocs/issue/issue_states.dart';
 import 'package:mms/data/models/issue_list.dart';
 import 'package:mms/views/root/screen_router.dart';
-import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class IssueDetailsScreen extends StatefulWidget {
   final Issue issue;
@@ -32,7 +32,7 @@ class _IssueDetailsScreenState extends State<IssueDetailsScreen> {
               appBar: AppBar(title: Text('Issue Details')),
               body: _mainView(state),
               bottomNavigationBar: _bottomButton()),
-          inAsyncCall: state is IssueLoading,
+          inAsyncCall: state is IssueLoadInProgress,
           progressIndicator: SpinKitDoubleBounce(
             color: Colors.white.withOpacity(0.8),
           ));
@@ -51,7 +51,7 @@ class _IssueDetailsScreenState extends State<IssueDetailsScreen> {
       );
 
   _mainView(IssueState state) {
-    if (state is IssueLoaded) {
+    if (state is IssueLoadSuccess) {
       Issue issue = state.issue;
       return SingleChildScrollView(
         child: Column(

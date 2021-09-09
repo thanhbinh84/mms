@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:mms/blocs/issues/issues_bloc.dart';
+import 'package:mms/blocs/issues/issues_cubit.dart';
 import 'package:mms/blocs/issues/issues_states.dart';
 import 'package:mms/common/utils.dart';
 import 'package:mms/data/models/issue_criteria.dart';
@@ -39,7 +39,7 @@ class _IssuesScreenState extends State<IssuesScreen> {
           if (state is IssuesFailure) {
             _refreshCompleted();
             Utils.errorToast(state.error);
-          } else if (state is IssuesLoaded) _refreshCompleted();
+          } else if (state is IssuesLoadSuccess) _refreshCompleted();
         },
         child: Scaffold(
           appBar: AppBar(
@@ -60,30 +60,37 @@ class _IssuesScreenState extends State<IssuesScreen> {
       children: [_criteriaView(), Divider(), Expanded(child: _smartRefresherView())]);
 
   _criteriaView() => BlocBuilder<IssuesCubit, IssuesState>(
+      buildWhen: (previous, current) {
+        return current is IssuesLoadSuccess;
+      },
       builder: (context, state) => SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(children: [_statusView(state), _sortView(state), SizedBox(width: 15)])));
 
-  _statusView(IssuesState state) => DropdownWidget(
-      onItemSelected: (value) => _getIssues(status: value as Status),
-      currentItem: state.issueCriteria.status,
-      itemList: Status.list);
+  _statusView(IssuesState state) => state is IssuesLoadSuccess
+      ? DropdownWidget(
+          onItemSelected: (value) => _getIssues(status: value as Status),
+          currentItem: state.issueCriteria.status,
+          itemList: Status.list)
+      : Container();
 
-  _sortView(IssuesState state) => DropdownWidget(
-      onItemSelected: (value) => _getIssues(sortBy: value as SortBy),
-      currentItem: state.issueCriteria.sortBy,
-      itemList: SortBy.list);
+  _sortView(IssuesState state) => state is IssuesLoadSuccess
+      ? DropdownWidget(
+          onItemSelected: (value) => _getIssues(sortBy: value as SortBy),
+          currentItem: state.issueCriteria.sortBy,
+          itemList: SortBy.list)
+      : Container();
 
   _smartRefresherView() {
     return BlocBuilder<IssuesCubit, IssuesState>(
       builder: (context, state) {
         return SmartRefresher(
             enablePullDown: true,
-            enablePullUp: state is IssuesLoaded ? state.issueList.hasNextPage : true,
+            enablePullUp: state is IssuesLoadSuccess ? state.issueList.hasNextPage : true,
             controller: _refreshController,
             onRefresh: _getIssues,
             onLoading: () => _getIssues(loadMore: true),
-            child: state is IssuesLoading && state.issueList.currentList.isEmpty
+            child: state is IssuesLoadInProgress
                 ? SpinKitWave(color: Theme.of(context).accentColor, size: 25.0)
                 : _listView(state));
       },
@@ -91,14 +98,17 @@ class _IssuesScreenState extends State<IssuesScreen> {
   }
 
   _listView(IssuesState state) {
-    IssueList? issueList = state.issueList;
-    List<Issue> currentList = issueList.currentList;
-    return currentList.isEmpty
-        ? Center(child: Text('No issue found'))
-        : ListView.builder(
-            itemBuilder: (context, index) => _listItemView(currentList[index]),
-            itemCount: currentList.length,
-          );
+    if (state is IssuesLoadSuccess) {
+      IssueList? issueList = state.issueList;
+      List<Issue> currentList = issueList.currentList;
+      return currentList.isEmpty
+          ? Center(child: Text('No issue found'))
+          : ListView.builder(
+              itemBuilder: (context, index) => _listItemView(currentList[index]),
+              itemCount: currentList.length,
+            );
+    }
+    return Container();
   }
 
   _listItemView(Issue issue) {
