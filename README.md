@@ -1,6 +1,6 @@
 # mms
 
-Flutter GitHub repository
+A Flutter app showing flutter respository's issues using GraphQL API. 
 
 ## Steps to run:
 • Generate access token key https://docs.github.com/en/graphql/guides/forming-calls-with-graphql#authenticating-with-graphql
