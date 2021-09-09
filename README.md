@@ -46,3 +46,7 @@ As a user I want to:
 
 https://user-images.githubusercontent.com/366768/132605508-3845aec8-a6d1-423b-a4d1-8549b48a48e5.mp4
 
+Goden test results: 
+
+![multiple_screens_testing](https://user-images.githubusercontent.com/366768/132611519-ca2b32d3-d9e1-4940-80e6-6b7c69f0b840.png)
+
