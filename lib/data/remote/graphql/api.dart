@@ -49,7 +49,7 @@ class API extends BaseAPI {
     QueryOptions queryOptions =
         QueryOptions(document: IssuesQuery(variables: arg).document, variables: arg.toJson());
     Map<String, dynamic> data = await _handleResponse(_graphQLClient.query(queryOptions));
-    return IssueList.fromJson(Issues$Query.fromJson(data).repository!.issues);;
+    return IssueList.fromJson(Issues$Query.fromJson(data).repository!.issues);
   }
 
   @override
