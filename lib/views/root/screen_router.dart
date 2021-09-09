@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mms/blocs/issue/issue_bloc.dart';
-import 'package:mms/blocs/issues/issues_bloc.dart';
+import 'package:mms/blocs/issue/issue_cubit.dart';
+import 'package:mms/blocs/issues/issues_cubit.dart';
 import 'package:mms/data/remote/graphql/api.dart';
 import 'package:mms/data/repositories/issue_repos.dart';
 import 'package:mms/views/screens/issue_detail_screen.dart';

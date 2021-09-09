@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:mms/blocs/issues/issues_bloc.dart';
+import 'package:mms/blocs/issues/issues_cubit.dart';
 import 'package:mms/blocs/issues/issues_states.dart';
 import 'package:mms/common/utils.dart';
 import 'package:mms/data/models/issue_criteria.dart';

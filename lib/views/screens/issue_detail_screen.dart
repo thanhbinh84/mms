@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:mms/blocs/issue/issue_bloc.dart';
+import 'package:mms/blocs/issue/issue_cubit.dart';
 import 'package:mms/blocs/issue/issue_states.dart';
 import 'package:mms/data/models/issue_list.dart';
 import 'package:mms/views/root/screen_router.dart';

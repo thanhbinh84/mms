@@ -143,7 +143,8 @@ Issue$Query$Repository$Issue _$Issue$Query$Repository$IssueFromJson(
         ? null
         : Issue$Query$Repository$Issue$Author.fromJson(
             json['author'] as Map<String, dynamic>)
-    ..bodyHTML = json['bodyHTML'] as String;
+    ..bodyHTML = json['bodyHTML'] as String
+    ..body = json['body'] as String;
 }
 
 Map<String, dynamic> _$Issue$Query$Repository$IssueToJson(
@@ -151,6 +152,7 @@ Map<String, dynamic> _$Issue$Query$Repository$IssueToJson(
     <String, dynamic>{
       'author': instance.author?.toJson(),
       'bodyHTML': instance.bodyHTML,
+      'body': instance.body,
     };
 
 Issue$Query$Repository _$Issue$Query$RepositoryFromJson(

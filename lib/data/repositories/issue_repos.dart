@@ -14,7 +14,7 @@ class IssueRepository extends BaseIssueRepository {
   final BaseAPI api;
   IssueRepository({required this.api});
 
-  Future<IssueList> getIssues(IssueList issueList, IssueCriteria issueCriteria) async {
+  Future<IssueList> getIssues(IssueList issueList, IssueCriteria issueCriteria) {
     return api.getIssues(issueList, issueCriteria);
   }
 
