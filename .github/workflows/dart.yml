@@ -13,4 +13,4 @@ jobs:
           flutter-version: '2.2.1'
           channel: stable
       - run: flutter pub get
-      - run: flutter test --update-goldens
+      - run: flutter test --update-goldens --no-sound-null-safety
