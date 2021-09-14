@@ -17,8 +17,7 @@ class IssuesCubit extends Cubit<IssuesState> {
 
       if (state is IssuesLoadSuccess) {
         IssuesLoadSuccess issuesLoaded = state as IssuesLoadSuccess;
-        if (loadMore)
-          _issueList = issuesLoaded.issueList;
+        if (loadMore) _issueList = issuesLoaded.issueList;
         _issueCriteria = issuesLoaded.issueCriteria;
       }
 
@@ -45,13 +44,9 @@ class IssuesCubit extends Cubit<IssuesState> {
     issueRepository.setVisitedIssues(_visitedIssue);
     if (state is IssuesLoadSuccess) {
       IssuesLoadSuccess issuesLoaded = state as IssuesLoadSuccess;
-      issuesLoaded.issueList.currentList
-          .firstWhere((element) => element == issue)
-          .isVisited = true;
+      issuesLoaded.issueList.currentList.firstWhere((element) => element == issue).isVisited = true;
       emit(IssuesLoadInProgress()); // force reload
       emit(IssuesLoadSuccess(issueList: issuesLoaded.issueList, issueCriteria: issuesLoaded.issueCriteria));
     }
   }
 }
-
-
