@@ -1,4 +1,4 @@
-# mms
+# Github issue browser app
 
 A Flutter app showing flutter respository's issues using GraphQL API. 
 
